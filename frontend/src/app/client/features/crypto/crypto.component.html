@@ -1,0 +1,164 @@
+<!-- src/app/features/crypto/crypto.component.html -->
+<div class="crypto-container">
+  <div class="header">
+    <h2>Portefeuille Crypto</h2>
+    <div class="total-value">
+      <span>Valeur totale: {{ totalValue | currency:'EUR':'symbol':'1.2-2' }}</span>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab" [class.active]="activeTab === 'balance'" (click)="setActiveTab('balance')">Mon Portefeuille</div>
+    <div class="tab" [class.active]="activeTab === 'market'" (click)="setActiveTab('market')">Marché</div>
+    <div class="tab" [class.active]="activeTab === 'transactions'" (click)="setActiveTab('transactions')">Historique</div>
+  </div>
+
+  <!-- Mon Portefeuille -->
+  <div *ngIf="activeTab === 'balance'" class="tab-content">
+    <div class="balances-list">
+      <div *ngIf="userBalances.length === 0" class="empty-state">
+        <p>Vous n'avez pas encore de cryptomonnaies dans votre portefeuille.</p>
+        <button (click)="setActiveTab('market')" class="btn-primary">Acheter des cryptos</button>
+      </div>
+
+      <div *ngFor="let balance of userBalances" class="balance-item">
+        <div class="crypto-info" (click)="selectCrypto(getCryptoById(balance.cryptoId))">
+          <img [src]="getCryptoById(balance.cryptoId)?.logo" [alt]="balance.symbol">
+          <div>
+            <h3>{{ getCryptoById(balance.cryptoId)?.name }}</h3>
+            <span class="symbol">{{ balance.symbol }}</span>
+          </div>
+        </div>
+        <div class="balance-details">
+          <div class="amount">{{ balance.amount }} {{ balance.symbol }}</div>
+          <div class="value">{{ balance.valueInEUR | currency:'EUR':'symbol':'1.2-2' }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marché -->
+  <div *ngIf="activeTab === 'market'" class="tab-content">
+    <div class="market-view">
+      <div class="crypto-list">
+        <div *ngFor="let crypto of cryptos" class="crypto-item" [class.selected]="selectedCrypto?.id === crypto.id" (click)="selectCrypto(crypto)">
+          <div class="crypto-info">
+            <img [src]="crypto.logo" [alt]="crypto.symbol">
+            <div>
+              <h3>{{ crypto.name }}</h3>
+              <span class="symbol">{{ crypto.symbol }}</span>
+            </div>
+          </div>
+          <div class="price-info">
+            <div class="price">{{ crypto.currentPrice | currency:'EUR':'symbol':'1.2-2' }}</div>
+            <div class="change" [class.positive]="crypto.change24h >= 0" [class.negative]="crypto.change24h < 0">
+              <fa-icon [icon]="crypto.change24h >= 0 ? faArrowUp : faArrowDown"></fa-icon>
+              {{ crypto.change24h.toFixed(2) }}%
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="crypto-detail" *ngIf="selectedCrypto">
+        <div class="crypto-header">
+          <div class="crypto-title">
+            <img [src]="selectedCrypto.logo" [alt]="selectedCrypto.symbol">
+            <h3>{{ selectedCrypto.name }} <span class="symbol">({{ selectedCrypto.symbol }})</span></h3>
+          </div>
+          <div class="crypto-price">
+            <div class="current-price">{{ selectedCrypto.currentPrice | currency:'EUR':'symbol':'1.2-2' }}</div>
+            <div class="change" [class.positive]="selectedCrypto.change24h >= 0" [class.negative]="selectedCrypto.change24h < 0">
+              <fa-icon [icon]="selectedCrypto.change24h >= 0 ? faArrowUp : faArrowDown"></fa-icon>
+              {{ selectedCrypto.change24h.toFixed(2) }}%
+            </div>
+          </div>
+        </div>
+
+        <div class="price-chart">
+          <div class="timeframe-selector">
+            <button [class.active]="timeframe === '24h'" (click)="changeTimeframe('24h')">24H</button>
+            <button [class.active]="timeframe === '7d'" (click)="changeTimeframe('7d')">7J</button>
+            <button [class.active]="timeframe === '30d'" (click)="changeTimeframe('30d')">30J</button>
+          </div>
+
+          <canvas baseChart
+                  [data]="lineChartData"
+                  [options]="lineChartOptions"
+                  [type]="'line'">
+          </canvas>
+        </div>
+
+        <div class="transaction-form">
+          <div class="transaction-type-selector">
+            <button [class.active]="transactionType === 'buy'" (click)="setTransactionType('buy')">Acheter</button>
+            <button [class.active]="transactionType === 'sell'" (click)="setTransactionType('sell')">Vendre</button>
+          </div>
+
+          <div class="transaction-fields">
+            <div class="form-group">
+              <label for="crypto-amount">Montant en {{ selectedCrypto.symbol }}</label>
+              <input type="number" id="crypto-amount" [(ngModel)]="transactionAmount"
+                     [attr.max]="transactionType === 'sell' ? getCryptoBalance(selectedCrypto.id) : null"
+                     step="0.00001">
+            </div>
+
+            <div class="form-group">
+              <label for="fiat-amount">Équivalent en EUR</label>
+              <input type="text" id="fiat-amount"
+                     [value]="(transactionAmount * selectedCrypto.currentPrice) | currency:'EUR':'symbol':'1.2-2'"
+                     disabled>
+            </div>
+
+            <div class="form-group">
+              <label for="account-select">Compte source/destination</label>
+              <select id="account-select" [(ngModel)]="selectedAccount">
+                <option *ngFor="let account of accounts" [value]="account.id">
+                  {{ account.id }} ({{ account.balance | currency:'EUR':'symbol':'1.2-2' }})
+                </option>
+              </select>
+            </div>
+
+            <button class="btn-primary execute-transaction"
+                    [disabled]="transactionAmount <= 0 || (transactionType === 'sell' && transactionAmount > getCryptoBalance(selectedCrypto.id))"
+                    (click)="executeCryptoTransaction()">
+              {{ transactionType === 'buy' ? 'Acheter' : 'Vendre' }} {{ selectedCrypto.symbol }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Historique des transactions -->
+  <div *ngIf="activeTab === 'transactions'" class="tab-content">
+    <div class="transactions-list">
+      <table>
+        <thead>
+        <tr>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Crypto</th>
+          <th>Montant</th>
+          <th>Prix</th>
+          <th>Total</th>
+          <th>Statut</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let tx of transactions">
+          <td>{{ tx.date | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td [class.buy]="tx.type === 'achat'" [class.sell]="tx.type === 'vente'">{{ tx.type }}</td>
+          <td>{{ tx.symbol }}</td>
+          <td>{{ tx.amount }} {{ tx.symbol }}</td>
+          <td>{{ tx.price | currency:'EUR':'symbol':'1.2-2' }}</td>
+          <td>{{ tx.total | currency:'EUR':'symbol':'1.2-2' }}</td>
+          <td>{{ tx.status }}</td>
+        </tr>
+        <tr *ngIf="transactions.length === 0">
+          <td colspan="7" class="empty-state">Aucune transaction à afficher</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

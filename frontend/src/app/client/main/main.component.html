@@ -1,0 +1,26 @@
+<div class="main-content">
+  <!-- Résumé des comptes -->
+  <section class="account-summary">
+    <app-account [displayMode]="'summary'"></app-account>
+  </section>
+
+  <!-- Graphique des dépenses -->
+  <section class="expense-graph">
+<!--    <app-expense-graph></app-expense-graph>-->
+  </section>
+
+  <!-- Transactions récentes -->
+  <section class="recent-transactions">
+    <app-transaction [displayMode]="'summary'"></app-transaction>
+  </section>
+
+  <!-- Boutons d’accès rapide -->
+  <section class="quick-actions">
+    <div class="quick-actions-container">
+      <app-quick-action type="virement"></app-quick-action>
+      <app-quick-action type="crypto"></app-quick-action>
+      <app-quick-action type="recharge"></app-quick-action>
+    </div>
+  </section>
+
+</div>

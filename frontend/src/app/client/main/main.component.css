@@ -1,0 +1,32 @@
+/* Structure globale du contenu principal */
+.main-content {
+  padding: 20px;
+  background-color: #f9fafb;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+
+/* Quick Actions - côte à côte */
+.quick-actions-container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Transactions récentes */
+.recent-transactions {
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Pour le chatbot assistant, tu peux ajouter ça si besoin */
+.chatbot-assistant {
+  position: relative;
+  margin-top: 30px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 20px;
+}

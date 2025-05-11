@@ -1,0 +1,127 @@
+<!-- MODE RÉSUMÉ -->
+<div *ngIf="displayMode === 'summary'" class="account-summary-container">
+  <h3>Résumé des comptes</h3>
+
+  <div class="account-summary-list">
+    <div class="card-summary" *ngFor="let account of accounts">
+      <div class="balance">
+        <strong>{{ account.type }}</strong>
+        <h2>{{ account.balance }} {{ account.currency }}</h2>
+      </div>
+
+      <div class="details">
+        <div>Compte courant</div>
+        <div class="card-number">**** **** **** {{ account.accountNumber.slice(-4) }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODE DÉTAILLÉ -->
+<div *ngIf="displayMode === 'detailed'" class="accounts-container">
+  <!-- Section 1: Liste des comptes -->
+  <div class="accounts-list section-card">
+    <h2>Mes Comptes</h2>
+    <div class="account-cards">
+      @for (account of accounts; track account.id) {
+        <div class="account-card" (click)="selectAccount(account)" [class.selected]="selectedAccount?.id === account.id">
+          <div class="account-info">
+            <div class="account-type">{{ account.type }}</div>
+            <div class="account-number">{{ account.accountNumber | slice:0:4 }}...{{ account.accountNumber | slice:-4 }}</div>
+            <div class="account-balance">{{ account.balance }} {{ account.currency }}</div>
+          </div>
+          <div class="view-details">
+            <fa-icon [icon]="faEye"></fa-icon>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  @if (selectedAccount) {
+    <div class="details-filters-container">
+      <!-- Section 2: Informations du compte -->
+      <div class="account-info section-card">
+        <h2>Détails du compte {{ selectedAccount.type }}</h2>
+        <div class="account-info-content">
+          <p class="account-number-full">{{ selectedAccount.accountNumber }}</p>
+          <p class="account-balance-large">Solde : <span>{{ selectedAccount.balance }} {{ selectedAccount.currency }}</span></p>
+          <div class="actions">
+            <button class="btn-download" (click)="downloadPDF()">
+              <fa-icon [icon]="faDownload"></fa-icon> Télécharger relevé PDF
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Filtrage des opérations -->
+      <div class="transaction-filters section-card">
+        <h2><fa-icon [icon]="faFilter"></fa-icon> Filtrer les opérations</h2>
+        <div class="filter-form">
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="dateFrom">Date de début</label>
+              <input type="date" id="dateFrom" [(ngModel)]="dateFrom">
+            </div>
+
+            <div class="filter-group">
+              <label for="dateTo">Date de fin</label>
+              <input type="date" id="dateTo" [(ngModel)]="dateTo">
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="amountMin">Montant min.</label>
+              <input type="number" id="amountMin" [(ngModel)]="amountMin">
+            </div>
+
+            <div class="filter-group">
+              <label for="amountMax">Montant max.</label>
+              <input type="number" id="amountMax" [(ngModel)]="amountMax">
+            </div>
+          </div>
+
+          <div class="filter-row">
+            <div class="filter-group">
+              <label for="transactionType">Type d'opération</label>
+              <select id="transactionType" [(ngModel)]="transactionType">
+                <option value="">Tous</option>
+                <option value="Virement">Virement</option>
+                <option value="Paiement">Paiement</option>
+                <option value="Prélèvement">Prélèvement</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="filter-buttons">
+            <button class="btn-apply" (click)="callApplyFilters()">Appliquer</button>
+            <button class="btn-reset" (click)="callResetFilters()">Réinitialiser</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Historique des opérations -->
+    <div class="transaction-history section-card">
+      <h2>Historique des opérations</h2>
+
+      <app-transaction
+        #transactionComp
+        *ngIf="selectedAccount"
+        [account]="selectedAccount"
+        [dateFrom]="dateFrom"
+        [dateTo]="dateTo"
+        [amountMin]="amountMin"
+        [amountMax]="amountMax"
+        [transactionType]="transactionType">
+      </app-transaction>
+
+    </div>
+  } @else {
+    <div class="no-account-selected">
+      <p>Sélectionnez un compte pour voir les détails</p>
+    </div>
+  }
+</div>

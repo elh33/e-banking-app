@@ -1,0 +1,36 @@
+.main-container {
+  display: flex;
+}
+
+.main-container .side-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100%;
+  background-color: #fdf2f8;
+  color: #374151;
+  box-shadow: 5px 5px 5px #e5e7eb;
+}
+
+@media only screen and (max-width: 1300px) {
+  .main-container .side-nav {
+    width: 100px;
+    min-width: 100px;
+  }
+}
+
+.main-container .main {
+  margin-left: 280px;
+  padding: 30px;
+  width: calc(100% - 280px);
+  background-color: #f9fafb;
+  color: #1f2937;
+}
+
+@media only screen and (max-width: 1300px) {
+  .main-container .main {
+    margin-left: 100px;
+    width: calc(100% - 100px);
+  }
+}
