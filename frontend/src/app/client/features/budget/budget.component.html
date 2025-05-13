@@ -69,7 +69,7 @@
     <!-- Graphique en barres des dépenses -->
     <div class="expense-chart panel">
       <h3>Dépenses mensuelles</h3>
-      <canvas baseChart
+      <canvas *ngIf="isBrowser" baseChart
               [data]="barChartData"
               [options]="barChartOptions"
               [type]="'bar'">
@@ -79,7 +79,7 @@
     <!-- Graphique circulaire -->
     <div class="pie-chart panel">
       <h3>Répartition des dépenses</h3>
-      <canvas baseChart
+      <canvas *ngIf="isBrowser" baseChart
               [type]="'pie'"
               [data]="pieChartData"
               [options]="pieChartOptions">

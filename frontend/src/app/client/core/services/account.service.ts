@@ -8,9 +8,9 @@ import { Account } from '../models/account.model';
 export class AccountService {
   // Données des comptes (mockées pour l'instant)
   private accounts: Account[] = [
-    { id: 1, accountNumber: 'FR7630001007941234567890185', type: 'Courant', balance: 1250.75, currency: '€' },
-    { id: 2, accountNumber: 'FR7630004000031234567890143', type: 'Épargne', balance: 4500.00, currency: '€' },
-    { id: 3, accountNumber: 'FR7630006000011234567890189', type: 'Livret A', balance: 7800.50, currency: '€' }
+    { id: 1, accountNumber: 'FR7630001007941234567890185', type: 'courant', balance: 1250.75, currency: '€', dateCrea: new Date('2023-01-01'), limit: 500 },
+    { id: 2, accountNumber: 'FR7630004000031234567890143', type: 'epargne', balance: 4500.00, currency: '€', dateCrea: new Date('2023-02-01'), limit: 1000 },
+    { id: 3, accountNumber: 'FR7630006000011234567890189', type: 'livret', balance: 7800.50, currency: '€', dateCrea: new Date('2023-03-01'), limit: 2000 },
   ];
 
   constructor() { }

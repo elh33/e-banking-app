@@ -8,13 +8,13 @@ import { Transaction } from '../models/transaction.model';
 export class TransactionService {
   // Données des transactions (mockées pour l'instant)
   private transactions: Transaction[] = [
-    { id: 1, accountId: 1, destinationAccountId: 3, date: new Date('2023-11-15'), description: 'Salaire', amount: 2100.00, type: 'Virement', status: 'Confirmé' },
-    { id: 2, accountId: 1, destinationAccountId: 2, date: new Date('2023-11-05'), description: 'Loyer', amount: -750.00, type: 'Prélèvement', status: 'Confirmé' },
-    { id: 3, accountId: 1, destinationAccountId: 2, date: new Date('2023-11-10'), description: 'Courses Supermarché', amount: -85.20, type: 'Paiement', status: 'Confirmé' },
-    { id: 4, accountId: 2, destinationAccountId: 1, date: new Date('2023-11-12'), description: 'Transfert épargne', amount: -200.00, type: 'Virement', status: 'Confirmé' },
-    { id: 5, accountId: 3, destinationAccountId: 2, date: new Date('2023-11-08'), description: 'Remboursement', amount: 120.50, type: 'Virement', status: 'Confirmé' },
-    { id: 6, accountId: 2, destinationAccountId: 3, date: new Date('2023-11-05'), description: 'Loyer', amount: -800.00, type: 'Prélèvement', status: 'Confirmé' },
-    { id: 7, accountId: 1, destinationAccountId: 3, date: new Date('2023-11-10'), description: 'Courses Supermarché', amount: -90.20, type: 'Paiement', status: 'Confirmé' },
+    { id: 1, accountId: 1, destinationAccountId: 3, date: new Date('2023-11-15'), description: 'Salaire', amount: 2100.00, type: 'virement', status: 'valide' },
+    { id: 2, accountId: 1, destinationAccountId: 2, date: new Date('2023-11-05'), description: 'Loyer', amount: -750.00, type: 'prelevement', status: 'valide' },
+    { id: 3, accountId: 1, destinationAccountId: 2, date: new Date('2023-11-10'), description: 'Courses Supermarché', amount: -85.20, type: 'paiement', status: 'valide' },
+    { id: 4, accountId: 2, destinationAccountId: 1, date: new Date('2023-11-12'), description: 'Transfert épargne', amount: -200.00, type: 'virement', status: 'valide' },
+    { id: 5, accountId: 3, destinationAccountId: 2, date: new Date('2023-11-08'), description: 'Remboursement', amount: 120.50, type: 'virement', status: 'valide' },
+    { id: 6, accountId: 2, destinationAccountId: 3, date: new Date('2023-11-05'), description: 'Loyer', amount: -800.00, type: 'prelevement', status: 'valide' },
+    { id: 7, accountId: 1, destinationAccountId: 3, date: new Date('2023-11-10'), description: 'Courses Supermarché', amount: -90.20, type: 'paiement', status: 'valide' },
   ];
 
   constructor() { }

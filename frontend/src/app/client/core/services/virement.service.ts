@@ -10,8 +10,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class VirementService {
   // Sources de données
   private accountsSubject = new BehaviorSubject<Account[]>([
-    { id: 1, accountNumber: 'FR7630001007941234567890185', type: 'Courant', balance: 1250.75, currency: '€' },
-    { id: 2, accountNumber: 'FR7630004000031234567890143', type: 'Épargne', balance: 4500.00, currency: '€' }
+    { id: 1, accountNumber: 'FR7630001007941234567890185', type: 'courant', balance: 1250.75, currency: '€', limit: 500, dateCrea: new Date('2020-01-01') },
+    { id: 2, accountNumber: 'FR7630004000031234567890143', type: 'epargne', balance: 4500.00, currency: '€', limit: 0, dateCrea: new Date('2019-05-15') },
   ]);
 
   private beneficiariesSubject = new BehaviorSubject<Beneficiary[]>([

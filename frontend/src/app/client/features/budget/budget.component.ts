@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, OnInit, OnDestroy, ViewChild, PLATFORM_ID, Inject} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -121,7 +121,7 @@ export class BudgetComponent implements OnInit, OnDestroy {
     aspectRatio: 2,
     plugins: {
       legend: {
-        position: 'right'as const,
+        position: 'right' as const,
         labels: {
           usePointStyle: true
         }
@@ -142,10 +142,15 @@ export class BudgetComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription = new Subscription();
 
+  isBrowser: boolean = false;
+
   constructor(
     private budgetService: BudgetService,
-    private accountService: AccountService
-  ) {}
+    private accountService: AccountService,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit(): void {
     console.log('Budget component initialized');

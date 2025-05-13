@@ -5,6 +5,6 @@ export interface Transaction {
   date: Date;
   description: string;
   amount: number;
-  type: string;
-  status: string;
+  type: 'virement' | 'prelevement' | 'paiement' | 'recharge' | 'crypto' | 'expense';
+  status: 'valide' | 'en attente' | 'refuse' | 'programme';
 }
