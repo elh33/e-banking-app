@@ -46,5 +46,22 @@
 
     <!-- ⚙️ Activer l’annotation @Transactional -->
     <tx:annotation-driven transaction-manager="transactionManager" />
+    <!-- 🎯 DAO & Service pour Agent -->
+    <bean id="agentRepository"
+          class="org.example.backend.Repository.Agent.AgentRepositoryImpl" />
+
+    <bean id="agentService"
+          class="org.example.backend.Service.Agent.AgentServiceImpl">
+        <property name="agentRepository" ref="agentRepository" />
+    </bean>
+    <!-- Client DAO -->
+    <bean id="clientRepository"
+          class="org.example.backend.Repository.Client.ClientRepositoryImpl" />
+
+    <!-- Client Service -->
+    <bean id="clientService"
+          class="org.example.backend.Service.Client.ClientServiceImpl">
+        <property name="clientRepository" ref="clientRepository" />
+    </bean>
 
 </beans>

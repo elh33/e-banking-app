@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tomcat-users xmlns="http://tomcat.apache.org/xml"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://tomcat.apache.org/xml tomcat-users.xsd"
+              version="1.0">
+
+    <!-- Définir un rôle pour le gestionnaire de Tomcat -->
+    <role rolename="manager-gui"/>
+
+    <!-- Définir un utilisateur avec le rôle manager-gui -->
+    <user username="admin" password="admin" roles="manager-gui"/>
+</tomcat-users>
