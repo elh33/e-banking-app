@@ -30,6 +30,15 @@ export const routes: Routes = [
     loadChildren: () => import('./agent/agent.module').then(m => m.AgentModule)
   },
   
+  // Admin module - lazy loaded
+  { 
+    path: 'admin', 
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+  },
+  
   // Redirect root to client by default
   { path: '', redirectTo: '/client', pathMatch: 'full' },
+  
+  // Catch-all route
+  { path: '**', redirectTo: '/client' }
 ];

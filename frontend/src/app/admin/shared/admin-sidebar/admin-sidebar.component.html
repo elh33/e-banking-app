@@ -1,0 +1,35 @@
+<div class="nav-items">
+    <div class="brand">
+      <h1>E-Bank Admin</h1>
+    </div>
+  
+    <div class="nav-item" routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <fa-icon [icon]="faChartLine"></fa-icon>
+      <span>Tableau de bord</span>
+    </div>
+    
+    <div class="nav-item" routerLink="/admin/agents" routerLinkActive="active">
+      <fa-icon [icon]="faUsers"></fa-icon>
+      <span>Gestion Agents</span>
+    </div>
+    
+    <div class="nav-item" routerLink="/admin/currencies" routerLinkActive="active">
+      <fa-icon [icon]="faMoneyBillWave"></fa-icon>
+      <span>Gestion Devises</span>
+    </div>
+    
+    <div class="nav-item" routerLink="/admin/transactions" routerLinkActive="active">
+      <fa-icon [icon]="faExchangeAlt"></fa-icon>
+      <span>Vérification Transactions</span>
+    </div>
+    
+    <div class="nav-item" routerLink="/admin/global-settings" routerLinkActive="active">
+      <fa-icon [icon]="faCog"></fa-icon>
+      <span>Paramètres Globaux</span>
+    </div>
+    
+    <div class="nav-item logout" (click)="logout()">
+      <fa-icon [icon]="faSignOutAlt"></fa-icon>
+      <span>Déconnexion</span>
+    </div>
+  </div>

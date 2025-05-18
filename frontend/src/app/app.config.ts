@@ -3,8 +3,11 @@ import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import {provideHttpClient} from '@angular/common/http';
-import {provideCharts} from 'ng2-charts';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideCharts } from 'ng2-charts';
+
+// Importez la fonction d'intercepteur (et non la classe)
+import { adminAuthInterceptor } from './admin/core/interceptors/admin-auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,6 +15,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
     provideCharts(),
-    provideHttpClient()
+    provideHttpClient(
+      withInterceptors([adminAuthInterceptor])
+    )
   ]
 };
