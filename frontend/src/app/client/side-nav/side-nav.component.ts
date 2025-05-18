@@ -1,14 +1,10 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, EventEmitter, HostListener, Inject, OnInit, Output, PLATFORM_ID} from '@angular/core';
+import {CommonModule, isPlatformBrowser} from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { AuthService } from '../../auth/services/auth.service';
 import {
-  faHome,
-  faCreditCard,
   faExchangeAlt,
-  faMobileAlt,
-  faChartPie,
-  faRobot,
   faSignOutAlt,
   faTachometerAlt,
   faUniversity,
@@ -16,11 +12,11 @@ import {
   faWallet,
   faBoxOpen,
   faUserCog,
-  faBarChart
+  faBars,
+  faBarChart,
+  faUserFriends
 } from '@fortawesome/free-solid-svg-icons';
-// Si vous avez besoin de faBitcoinSign, il fait partie de free-brands-icons
-import { faBitcoin } from '@fortawesome/free-brands-svg-icons';
-import { AuthService } from '../../auth/services/auth.service';
+
 
 @Component({
   selector: 'app-side-nav',
@@ -34,29 +30,96 @@ import { AuthService } from '../../auth/services/auth.service';
     CommonModule
   ]
 })
-export class SideNavComponent {
-  // Les icônes que vous utilisez dans votre template
-  faHome = faHome;
-  faCreditCard = faCreditCard;
-  faExchangeAlt = faExchangeAlt;
-  faMobileAlt = faMobileAlt;
-  faBitcoin = faBitcoin; // Remplacé faBitcoinSign par faBitcoin
-  faChartPie = faChartPie;
-  faRobot = faRobot;
-  faSignOutAlt = faSignOutAlt;
-  
-  // Les icônes additionnelles que vous référencez dans la classe
+
+
+export class SideNavComponent implements OnInit {
   faTachometerAlt = faTachometerAlt;
   faUniversity = faUniversity;
+  faExchangeAlt = faExchangeAlt;
   faStore = faStore;
   faWallet = faWallet;
   faBoxOpen = faBoxOpen;
   faUserCog = faUserCog;
+  faSignOutAlt = faSignOutAlt;
   faBarChart = faBarChart;
+  faBars = faBars;
+  faUserFriends = faUserFriends;
 
   showLogoutConfirm = false;
+  isCompactMode = false;
+  isMobile = false;
+  isFullScreen = false;
+  isMobileMenuOpen = false;
 
-  constructor(private authService: AuthService) {}
+  @Output() compactModeChanged = new EventEmitter<boolean>();
+  @Output() mobileMenuToggled = new EventEmitter<boolean>();
+
+  private resizeTimeout: any;
+  constructor(private authService: AuthService, @Inject(PLATFORM_ID) private platformId: Object) {}
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkScreenWidth();
+      this.updateContainerClass();
+    }
+  }
+
+  toggleSideNav(): void {
+    console.log('toggleSideNav called. isMobile:', this.isMobile, 'Current state:', {
+      isCompactMode: this.isCompactMode,
+      isMobile: this.isMobile,
+      isMobileMenuOpen: this.isMobileMenuOpen
+    });
+    if (this.isMobile) {
+      this.updateContainerClass();
+      this.mobileMenuToggled.emit(this.isMobileMenuOpen);
+    } else {
+      this.isCompactMode = !this.isCompactMode;
+      this.updateContainerClass();
+      this.compactModeChanged.emit(this.isCompactMode);
+    }
+  }
+
+  private updateContainerClass(): void {
+    const container = document.querySelector('.nav-container');
+    if (container) {
+      if (this.isMobile && this.isMobileMenuOpen) {
+        container.classList.add('is-open');
+      } else {
+        container.classList.remove('is-open');
+      }
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (isPlatformBrowser(this.platformId)) {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(() => this.checkScreenWidth(), 200);
+    }
+  }
+
+  private checkScreenWidth(): void {
+    const width = window.innerWidth;
+    this.isMobile = width <= 768;
+    this.isFullScreen = width > 1300;
+
+    if (this.isMobile) {
+      this.isCompactMode = false;
+      if (!this.isMobileMenuOpen) {
+        this.isMobileMenuOpen = true;
+      }
+      this.updateContainerClass();
+      this.mobileMenuToggled.emit(this.isMobileMenuOpen);
+    } else if (this.isFullScreen) {
+      this.isCompactMode = false;
+      this.updateContainerClass();
+    } else {
+      this.isCompactMode = true;
+      this.updateContainerClass();
+    }
+    this.compactModeChanged.emit(this.isCompactMode);
+  }
 
   openLogoutConfirm(): void {
     this.showLogoutConfirm = true;

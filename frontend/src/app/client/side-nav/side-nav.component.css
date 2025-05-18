@@ -1,44 +1,112 @@
-.nav-items {
+/* Sidenav container */
+.nav-container {
+  height: 100vh;
+  width: 280px;
+  background-color: #e2e8f0;
+  transition: width 0.3s ease, transform 0.3s ease;
   position: fixed;
   top: 0;
   left: 0;
-  width: 280px;
-  height: 100%;
-  background-color: #e2e8f0; /* bleu-gris clair */
-  color: #374151; /* texte bleu-gris foncé */
-  display: flex;
-  flex-direction: column;
-  padding-top: 20px;
-  box-shadow: 5px 0 10px rgba(0, 0, 0, 0.05);
-  font-family: 'Segoe UI', sans-serif;
+  z-index: 1000;
+  overflow-y: auto;
 }
 
-.nav-items .brand {
-  font-size: 20px;
-  font-weight: 700;
-  height: 56px;
+/* Navigation items */
+.nav-items {
+  width: 100%;
+  height: 100%;
+  color: #374151;
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: inherit;
+}
+
+/* Compact mode */
+.nav-container.compact-mode {
+  width: 80px;
+}
+
+.nav-items.compact-mode {
+  width: 80px;
+}
+
+/* Header section */
+.header-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-top: 10px;
+  width: 100%;
+  position: relative;
+}
+
+/* Toggle button */
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  right: 5px; /* Adjusted for compact mode */
+  background: none;
+  color: #1e68c6;
+  border: none;
+  width: 25px; /* Slightly smaller for compact mode */
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1e293b; /* bleu-gris foncé */
+  cursor: pointer;
+  font-size: 15px; /* Adjusted size */
+  transition: color 0.2s ease;
+  z-index: 1001;
 }
 
+.toggle-button {
+  display: flex !important; /* Always visible */
+}
+
+.toggle-button:hover {
+  color: #1e68c6;
+  font-size: 18px;
+}
+
+
+/* Brand styling */
+.nav-items .brand {
+  text-align: center;
+  padding: 0 10px;
+  margin-top: 40px;
+}
+
+.nav-items .brand h1 {
+  font-size: 24px;
+  margin: 0;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Navigation items */
 .nav-items .nav-item {
-  padding: 20px 35px;
+  padding: 16px 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-items .nav-item:hover {
-  background-color: #cbd5e1; /* bleu-gris pastel clair sur hover */
+  background-color: #cbd5e1;
 }
 
 .nav-items .nav-item fa-icon {
-  margin-right: 20px;
+  margin-right: 15px;
   font-size: 20px;
-  color: #1e3a8a; /* bleu foncé */
+  color: #1e3a8a;
+  min-width: 24px;
 }
 
 .nav-items .nav-item span {
@@ -46,37 +114,141 @@
   font-weight: 500;
 }
 
+/* Active item */
 .nav-item.active {
   background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
   border-left: 3px solid #6b4ce6;
 }
 
-@media only screen and (max-width: 1300px) {
+/* Compact mode adjustments */
+.nav-items.compact-mode .nav-item {
+  padding: 16px 0;
+  justify-content: center;
+}
+
+.nav-items.compact-mode .brand h1 {
+  font-size: 18px;
+}
+
+.nav-items.compact-mode .nav-item fa-icon {
+  margin-right: 0;
+}
+
+.nav-items.compact-mode .nav-item span {
+  display: none;
+}
+
+/*!* Sidenav handle *!*/
+/*.sidenav-handle {*/
+/*  position: fixed;*/
+/*  top: 0;*/
+/*  right: -30px;*/
+/*  width: 30px;*/
+/*  height: 40px;*/
+/*  background-color: #e2e8f0;*/
+/*  border-radius: 0 0 12px 0;*/
+/*  cursor: pointer;*/
+/*  transition: all 0.3s ease;*/
+/*  opacity: 0;*/
+/*  pointer-events: none;*/
+/*  z-index: 1002;*/
+/*}*/
+
+/*.sidenav-handle:hover {*/
+/*  background-color: #0c4a94;*/
+/*}*/
+
+/*!* Show handle in compact/mobile mode when closed *!*/
+/*.nav-container.compact-mode .sidenav-handle,*/
+/*.nav-container:not(.is-open) .sidenav-handle.active {*/
+/*  opacity: 1;*/
+/*  pointer-events: auto;*/
+/*}*/
+
+/*!* Hide handle when mobile menu is open *!*/
+/*.nav-container.is-open .sidenav-handle {*/
+/*  opacity: 0;*/
+/*  pointer-events: none;*/
+/*}*/
+
+
+/* Mobile adjustments */
+@media only screen and (max-width: 768px) {
+  .nav-container {
+    width: 280px;
+    transform: translateX(-100%);
+  }
+  .nav-container.is-open {
+    transform: translateX(0);
+  }
   .nav-items {
-    width: 100px;
+    width: 280px;
   }
-
-  .nav-items .nav-item {
-    padding: 20px 30px;
+  .nav-container.compact-mode {
+    width: 280px;
   }
-
-  .nav-items .nav-item span {
-    display: none;
+  .nav-items.compact-mode {
+    width: 280px;
+  }
+  .toggle-button {
+    top: 10px;
+    right: 10px;
+  }
+  .sidenav-handle {
+    width: 6px;
+    height: 60px;
+    right: 8px;
+    top: 8px;
+    border-radius: 0 3px 3px 0;
+  }
+  .sidenav-handle:hover {
+    width: 8px;
+  }
+  .sidenav.collapsed .sidenav-handle {
+    opacity: 1;
+    pointer-events: auto;
+    right: 0;
   }
 }
+
+@media only screen and (max-width: 480px) {
+  .nav-container {
+    width: 250px;
+  }
+  .nav-items {
+    width: 250px;
+  }
+  .nav-items .brand h1 {
+    font-size: 16px;
+  }
+  .toggle-button {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+  .sidenav-handle {
+    width: 5px;
+    height: 50px;
+    right: 6px;
+    top: 6px;
+  }
+  .sidenav-handle:hover {
+    width: 7px;
+  }
+}
+
 
 .logout-confirm-overlay {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 1000;
+  align-items: center;
+  z-index: 9999;
 }
 
 .logout-confirm-modal {
@@ -84,9 +256,8 @@
   border-radius: 8px;
   width: 400px;
   max-width: 90%;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  animation: modal-appear 0.3s ease-out;
 }
 
 @keyframes modal-appear {

@@ -7,22 +7,22 @@
     <fa-icon [icon]="faChartLine"></fa-icon>
     <span>Tableau de bord</span>
   </div>
-  
+
   <div class="nav-item" routerLink="/agent/clients" routerLinkActive="active">
     <fa-icon [icon]="faUsers"></fa-icon>
     <span>Gestion Clients</span>
   </div>
-  
+
   <div class="nav-item" routerLink="/agent/subscribers" routerLinkActive="active">
     <fa-icon [icon]="faCreditCard"></fa-icon>
     <span>Gestion Comptes</span>
   </div>
-  
+
   <div class="nav-item" routerLink="/agent/enrollments" routerLinkActive="active">
     <fa-icon [icon]="faClipboardList"></fa-icon>
     <span>Inscriptions</span>
   </div>
-  
+
   <!-- Item de déconnexion -->
   <div class="nav-item" (click)="openLogoutConfirm()">
     <fa-icon [icon]="faSignOutAlt"></fa-icon>
@@ -43,4 +43,5 @@
         <button class="confirm-btn" (click)="confirmLogout()">Déconnecter</button>
       </div>
     </div>
+</div>
 </div>

@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faDownload, faFilter, faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faSort, faSortUp, faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { Account } from '../../core/models/account.model';
 import { Transaction } from '../../core/models/transaction.model';
 import { TransactionService } from '../../core/services/transaction.service';
@@ -29,8 +29,7 @@ export class TransactionComponent implements OnChanges {
   filteredTransactions: Transaction[] = [];
   paginatedTransactions: Transaction[] = [];
 
-  faDownload = faDownload;
-  faFilter = faFilter;
+
   faSort = faSort;
   faSortUp = faSortUp;
   faSortDown = faSortDown;
