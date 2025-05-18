@@ -1,26 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {RouterLink, RouterLinkActive} from '@angular/router';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import {
   faBarChart,
   faBars,
   faBoxOpen,
-  faExchangeAlt, faSignOutAlt,
+  faExchangeAlt, 
+  faSignOutAlt,
   faStore,
   faTachometerAlt,
-  faUniversity, faUserCog,
+  faUniversity, 
+  faUserCog,
   faWallet
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-side-nav',
   templateUrl: './side-nav.component.html',
+  styleUrls: ['./side-nav.component.css'],
+  standalone: true,
   imports: [
     FaIconComponent,
     RouterLink,
-    RouterLinkActive
-  ],
-  styleUrls: ['./side-nav.component.css']
+    RouterLinkActive,
+    CommonModule
+  ]
 })
 export class SideNavComponent implements OnInit {
 
@@ -38,5 +43,4 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

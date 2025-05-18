@@ -23,9 +23,9 @@
 
       <div *ngFor="let balance of userBalances" class="balance-item">
         <div class="crypto-info" (click)="selectCrypto(getCryptoById(balance.cryptoId))">
-          <img [src]="getCryptoById(balance.cryptoId)?.logo" [alt]="balance.symbol">
+          <img [src]="getCryptoById(balance.cryptoId).logo" [alt]="balance.symbol">
           <div>
-            <h3>{{ getCryptoById(balance.cryptoId)?.name }}</h3>
+            <h3>{{ getCryptoById(balance.cryptoId).name }}</h3>
             <span class="symbol">{{ balance.symbol }}</span>
           </div>
         </div>

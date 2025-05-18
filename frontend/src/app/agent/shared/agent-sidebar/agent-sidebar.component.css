@@ -1,0 +1,85 @@
+.nav-items {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100%;
+  background-color: #1e293b; /* Version plus foncée du e2e8f0 de client */
+  color: #e2e8f0; /* Texte clair, inversé du client */
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  box-shadow: 5px 0 10px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.nav-items .brand {
+  font-size: 20px;
+  font-weight: 700;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.nav-items .brand h1 {
+  margin: 0;
+  color: #ffffff; /* Blanc pour le titre */
+}
+
+.nav-items .nav-item {
+  padding: 20px 35px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.nav-items .nav-item:hover {
+  background-color: #334155; /* Version plus foncée du hover client */
+}
+
+.nav-items .nav-item fa-icon {
+  margin-right: 20px;
+  font-size: 20px;
+  color: #94a3b8; /* Gris bleuté pour les icônes */
+}
+
+.nav-items .nav-item span {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.nav-item.active {
+  background-color: #475569; /* Plus foncé que le client */
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+  border-left: 3px solid #6366f1; /* Même couleur indigo que client */
+}
+
+.nav-item.active fa-icon {
+  color: #6366f1; /* Indigo comme l'accent client */
+}
+
+.nav-item.logout {
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
+.nav-item.logout fa-icon {
+  color: #f87171; /* Rouge pour le logout */
+}
+
+@media only screen and (max-width: 1300px) {
+  .nav-items {
+    width: 100px;
+  }
+
+  .nav-items .nav-item {
+    padding: 20px 30px;
+  }
+
+  .nav-items .nav-item span {
+    display: none;
+  }
+}

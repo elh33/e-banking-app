@@ -174,11 +174,10 @@ h3 {
 
 .amount-options {
   display: flex;
-  flex: 500;
+  flex-wrap: wrap;  /* correction de background-color-wrap: wrap */
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
-  background-color-wrap: wrap;
   gap: 10px;
   margin-bottom: 15px;
 }
@@ -232,7 +231,7 @@ h3 {
   gap: 10px;
   padding: 10px 20px;
   border-radius: 5px;
-  font-weight: #6b4ce6;
+  background-color: #6b4ce6;  /* correction de font-weight: #6b4ce6 */
   color: white;
 }
 

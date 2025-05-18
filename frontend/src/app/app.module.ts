@@ -1,20 +1,11 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import {SideNavComponent} from './client/side-nav/side-nav.component';
-import {MainComponent} from './client/main/main.component';
-import {QuickActionComponent} from './client/main/quick-action/quick-action.component';
-import {AccountComponent} from './client/features/account/account.component';
-import {TransactionComponent} from './client/features/transaction/transaction.component';
-import {CryptoComponent} from './client/features/crypto/crypto.component';
-import {RechargeComponent} from './client/features/recharge/recharge.component';
-import {BudgetComponent} from './client/features/budget/budget.component';
-import {AssistantComponent} from './client/features/assistant/assistant.component';
-import { ChartModule } from 'angular-highcharts';
-import { BaseChartDirective } from 'ng2-charts';
+import { ApplicationConfig } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
-// Importations de Chart.js
+import { routes } from './app.routes';
+
+// Chart.js imports
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,7 +19,7 @@ import {
   PieController
 } from 'chart.js';
 
-// Enregistrement des composants nécessaires
+// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -41,28 +32,10 @@ ChartJS.register(
   PieController
 );
 
-
-@NgModule({
-  declarations: [
-
-  ],
-  imports: [
-    BrowserModule,
-    AppComponent,
-    ChartModule,
-    FontAwesomeModule,
-    SideNavComponent,
-    MainComponent,
-    QuickActionComponent,
-    AccountComponent,
-    TransactionComponent,
-    CryptoComponent,
-    RechargeComponent,
-    BudgetComponent,
-    AssistantComponent,
-    BaseChartDirective
-  ],
-  providers: [],
-  bootstrap: []
-})
-export class AppModule { }
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideRouter(routes),
+    provideHttpClient(),
+    provideAnimations()
+  ]
+};

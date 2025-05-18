@@ -1,0 +1,35 @@
+<div class="nav-items">
+  <div class="brand">
+    <h1>E-Bank Agent</h1>
+  </div>
+
+  <div class="nav-item" routerLink="/agent/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+    <fa-icon [icon]="faChartLine"></fa-icon>
+    <span>Tableau de bord</span>
+  </div>
+  
+  <div class="nav-item" routerLink="/agent/clients" routerLinkActive="active">
+    <fa-icon [icon]="faUsers"></fa-icon>
+    <span>Gestion Clients</span>
+  </div>
+  
+  <div class="nav-item" routerLink="/agent/subscribers" routerLinkActive="active">
+    <fa-icon [icon]="faCreditCard"></fa-icon>
+    <span>Gestion Comptes</span>
+  </div>
+  
+  <div class="nav-item" routerLink="/agent/enrollments" routerLinkActive="active">
+    <fa-icon [icon]="faClipboardList"></fa-icon>
+    <span>Inscriptions</span>
+  </div>
+  
+  <div class="nav-item" routerLink="/agent/settings" routerLinkActive="active">
+    <fa-icon [icon]="faCog"></fa-icon>
+    <span>Paramètres</span>
+  </div>
+  
+  <div class="nav-item logout">
+    <fa-icon [icon]="faSignOutAlt"></fa-icon>
+    <span>Déconnexion</span>
+  </div>
+</div>
