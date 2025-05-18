@@ -260,10 +260,16 @@
             </div>
           </div>
         </div>
-        
-        <div class="modal-footer">
-          <button class="edit-btn" (click)="editClient(selectedClient)">Modifier</button>
-          <button class="close-btn" (click)="closeClientDetails()">Fermer</button>
+
+        <div class="modal-footer client-details-footer">
+          <button class="btn btn-secondary" (click)="closeClientDetails()">
+            <span class="btn-icon">✕</span>
+            <span>Fermer</span>
+          </button>
+          <button class="btn btn-primary" (click)="editClient(selectedClient)">
+            <span class="btn-icon">✏️</span>
+            <span>Modifier</span>
+          </button>
         </div>
       </div>
     </div>

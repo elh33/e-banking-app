@@ -1,44 +1,41 @@
 import { Routes } from '@angular/router';
-import { AccountComponent } from './client/features/account/account.component';
-import { MainComponent } from './client/main/main.component';
-import { VirementComponent } from './client/features/virement/virement.component';
-import { RechargeComponent } from './client/features/recharge/recharge.component';
-import { CryptoComponent } from './client/features/crypto/crypto.component';
-import { BudgetComponent } from './client/features/budget/budget.component';
-import { AssistantComponent } from './client/features/assistant/assistant.component';
-import { ClientLayoutComponent } from './client/layout/client-layout.component';
+import { AuthGuard } from './auth/guards/auth.guard';
+import { AUTH_ROUTES } from './auth/auth.routes';
 
 export const routes: Routes = [
-  // Client routes
+  // Route par défaut qui redirige vers l'authentification
+  { path: '', redirectTo: '/auth', pathMatch: 'full' },
+
+  // Routes d'authentification
+  { path: 'auth', children: AUTH_ROUTES },
+  
+  // Client routes - protégées par guard d'authentification
   { 
-    path: 'client', 
-    component: ClientLayoutComponent,
-    children: [
-      { path: '', component: MainComponent },
-      { path: 'account', component: AccountComponent },
-      { path: 'virement', component: VirementComponent },
-      { path: 'recharges', component: RechargeComponent },
-      { path: 'crypto', component: CryptoComponent },
-      { path: 'budget', component: BudgetComponent },
-      { path: 'assistant', component: AssistantComponent },
-    ]
+    path: 'client',
+    loadChildren: () => import('./client/client.routes').then(m => m.CLIENT_ROUTES),
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    data: { roles: ['CLIENT'] }
   },
   
-  // Agent module - lazy loaded
+  // Agent routes - protégées par guard d'authentification
   { 
     path: 'agent', 
-    loadChildren: () => import('./agent/agent.module').then(m => m.AgentModule)
+    loadChildren: () => import('./agent/agent.module').then(m => m.AgentModule),
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    data: { roles: ['AGENT'] }
   },
   
-  // Admin module - lazy loaded
+  // Admin routes - protégées par guard d'authentification
   { 
     path: 'admin', 
-    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AuthGuard],
+    canActivateChild: [AuthGuard],
+    data: { roles: ['ADMIN'] }
   },
   
-  // Redirect root to client by default
-  { path: '', redirectTo: '/client', pathMatch: 'full' },
-  
   // Catch-all route
-  { path: '**', redirectTo: '/client' }
+  { path: '**', redirectTo: '/auth/login' }
 ];

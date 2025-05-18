@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { AdminService } from '../../core/services/admin.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/services/auth.service';
 import {
   faChartLine,
   faUsers,
@@ -31,14 +32,20 @@ export class AdminSidebarComponent {
   faExchangeAlt = faExchangeAlt;
   faGlobe = faGlobe;
 
-  constructor(
-    private adminService: AdminService,
-    private router: Router
-  ) {}
+  showLogoutConfirm = false;
 
-  logout(): void {
-    this.adminService.logout().subscribe(() => {
-      this.router.navigate(['/login']);
-    });
+  constructor(private authService: AuthService) {}
+
+  openLogoutConfirm(): void {
+    this.showLogoutConfirm = true;
+  }
+
+  cancelLogout(): void {
+    this.showLogoutConfirm = false;
+  }
+
+  confirmLogout(): void {
+    this.authService.logout();
+    this.showLogoutConfirm = false;
   }
 }

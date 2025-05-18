@@ -6,8 +6,8 @@ import { provideClientHydration, withEventReplay } from '@angular/platform-brows
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideCharts } from 'ng2-charts';
 
-// Importez la fonction d'intercepteur (et non la classe)
-import { adminAuthInterceptor } from './admin/core/interceptors/admin-auth.interceptor';
+// Importer l'intercepteur central d'authentification
+import { authInterceptor } from './auth/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(withEventReplay()),
     provideCharts(),
     provideHttpClient(
-      withInterceptors([adminAuthInterceptor])
+      withInterceptors([authInterceptor])
     )
   ]
 };

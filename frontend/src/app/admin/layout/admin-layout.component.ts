@@ -12,8 +12,10 @@ import { AdminSidebarComponent } from '../shared/admin-sidebar/admin-sidebar.com
       <div class="side-nav">
         <app-admin-sidebar></app-admin-sidebar>
       </div>
-      <div class="main">
-        <router-outlet></router-outlet>
+      <div class="content-wrapper">
+        <div class="main">
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </div>
   `,

@@ -1,19 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
-  faBarChart,
-  faBars,
-  faBoxOpen,
-  faExchangeAlt, 
+  faHome,
+  faCreditCard,
+  faExchangeAlt,
+  faMobileAlt,
+  faChartPie,
+  faRobot,
   faSignOutAlt,
-  faStore,
   faTachometerAlt,
-  faUniversity, 
+  faUniversity,
+  faStore,
+  faWallet,
+  faBoxOpen,
   faUserCog,
-  faWallet
+  faBarChart
 } from '@fortawesome/free-solid-svg-icons';
+// Si vous avez besoin de faBitcoinSign, il fait partie de free-brands-icons
+import { faBitcoin } from '@fortawesome/free-brands-svg-icons';
+import { AuthService } from '../../auth/services/auth.service';
 
 @Component({
   selector: 'app-side-nav',
@@ -27,20 +34,40 @@ import {
     CommonModule
   ]
 })
-export class SideNavComponent implements OnInit {
-
+export class SideNavComponent {
+  // Les icônes que vous utilisez dans votre template
+  faHome = faHome;
+  faCreditCard = faCreditCard;
+  faExchangeAlt = faExchangeAlt;
+  faMobileAlt = faMobileAlt;
+  faBitcoin = faBitcoin; // Remplacé faBitcoinSign par faBitcoin
+  faChartPie = faChartPie;
+  faRobot = faRobot;
+  faSignOutAlt = faSignOutAlt;
+  
+  // Les icônes additionnelles que vous référencez dans la classe
   faTachometerAlt = faTachometerAlt;
   faUniversity = faUniversity;
-  faExchangeAlt = faExchangeAlt;
   faStore = faStore;
   faWallet = faWallet;
   faBoxOpen = faBoxOpen;
   faUserCog = faUserCog;
-  faSignOutAlt = faSignOutAlt;
   faBarChart = faBarChart;
 
-  constructor() { }
+  showLogoutConfirm = false;
 
-  ngOnInit(): void {
+  constructor(private authService: AuthService) {}
+
+  openLogoutConfirm(): void {
+    this.showLogoutConfirm = true;
+  }
+
+  cancelLogout(): void {
+    this.showLogoutConfirm = false;
+  }
+
+  confirmLogout(): void {
+    this.authService.logout();
+    this.showLogoutConfirm = false;
   }
 }
