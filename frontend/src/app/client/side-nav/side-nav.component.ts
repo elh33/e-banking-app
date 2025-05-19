@@ -85,7 +85,7 @@ export class SideNavComponent implements OnInit {
     if (container) {
       if (this.isMobile && this.isMobileMenuOpen) {
         container.classList.add('is-open');
-      } else {
+      } else if (this.isMobile) {
         container.classList.remove('is-open');
       }
     }

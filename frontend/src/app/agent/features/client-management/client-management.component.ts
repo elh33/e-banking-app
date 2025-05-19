@@ -15,17 +15,17 @@ export class ClientManagementComponent implements OnInit {
   clients: Client[] = [];
   filteredClients: Client[] = [];
   selectedClient: Client | null = null;
-  
+
   // Filters
   searchQuery: string = '';
   statusFilter: string = 'all';
-  
+
   // Form
   clientForm: FormGroup;
   showClientModal: boolean = false;
   isEditMode: boolean = false;
   isSubmitting: boolean = false;
-  
+
   isLoading: boolean = true;
 
   constructor(
@@ -74,11 +74,11 @@ export class ClientManagementComponent implements OnInit {
 
   applyFilters(): void {
     let result = [...this.clients];
-    
+
     // Apply search query if any
     if (this.searchQuery && this.searchQuery.trim() !== '') {
       const query = this.searchQuery.toLowerCase().trim();
-      result = result.filter(client => 
+      result = result.filter(client =>
         client.firstName.toLowerCase().includes(query) ||
         client.lastName.toLowerCase().includes(query) ||
         client.email.toLowerCase().includes(query) ||
@@ -86,12 +86,12 @@ export class ClientManagementComponent implements OnInit {
         (client.nationalId && client.nationalId.toLowerCase().includes(query))
       );
     }
-    
+
     // Apply status filter if not 'all'
     if (this.statusFilter !== 'all') {
       result = result.filter(client => client.status === this.statusFilter);
     }
-    
+
     this.filteredClients = result;
   }
 
@@ -110,7 +110,7 @@ export class ClientManagementComponent implements OnInit {
   editClient(client: Client): void {
     this.isEditMode = true;
     this.clientForm.patchValue(client);
-    
+
     // Convert dateOfBirth to the format expected by input type="date"
     if (client.dateOfBirth) {
       const date = new Date(client.dateOfBirth);
@@ -118,9 +118,9 @@ export class ClientManagementComponent implements OnInit {
         dateOfBirth: date.toISOString().split('T')[0]
       });
     }
-    
+
     this.showClientModal = true;
-    
+
     // If we were viewing client details, close that modal
     this.selectedClient = null;
   }
@@ -153,10 +153,10 @@ export class ClientManagementComponent implements OnInit {
       });
       return;
     }
-    
+
     this.isSubmitting = true;
     const clientData = this.clientForm.value;
-    
+
     if (this.isEditMode) {
       // Update existing client
       const id = clientData.id;
@@ -229,7 +229,7 @@ export class ClientManagementComponent implements OnInit {
         if (updatedClient) {
           this.clients = this.clients.map(c => c.id === id ? updatedClient : c);
           this.applyFilters();
-          
+
           // Update selected client if open
           if (this.selectedClient && this.selectedClient.id === id) {
             this.selectedClient = updatedClient;

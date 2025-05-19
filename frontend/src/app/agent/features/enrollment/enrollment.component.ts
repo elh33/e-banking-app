@@ -90,7 +90,7 @@ export class EnrollmentComponent implements OnInit {
       if (this.statusFilter !== 'all' && enrollment.status !== this.statusFilter) {
         return false;
       }
-      
+
       // Apply search filter
       if (this.searchTerm.trim() !== '') {
         const search = this.searchTerm.toLowerCase();
@@ -102,7 +102,7 @@ export class EnrollmentComponent implements OnInit {
           (client.phone && client.phone.includes(search))
         );
       }
-      
+
       return true;
     });
   }

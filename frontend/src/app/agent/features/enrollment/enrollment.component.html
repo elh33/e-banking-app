@@ -5,7 +5,7 @@
       <div class="search-bar">
         <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un client...">
       </div>
-      
+
       <div class="filter-options">
         <select [(ngModel)]="statusFilter">
           <option value="all">Tous les statuts</option>
@@ -17,7 +17,7 @@
     </div>
   </div>
 
-  <div class="enrollments-list" *ngIf="!isLoading; else loadingTemplate">
+  <div class="enrollments-list table-container" *ngIf="!isLoading; else loadingTemplate">
     <div *ngIf="getFilteredEnrollments().length; else noEnrollments">
       <table>
         <thead>
@@ -30,19 +30,19 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let enrollment of getFilteredEnrollments()">
-            <td>{{ enrollment.client.firstName }} {{ enrollment.client.lastName }}</td>
-            <td>{{ enrollment.client.email }}</td>
-            <td>{{ formatDate(enrollment.dateCreated) }}</td>
-            <td>
-              <span class="status-badge" [class]="getStatusClass(enrollment.status)">
-                {{ getStatusText(enrollment.status) }}
-              </span>
-            </td>
-            <td>
-              <button class="btn-view" (click)="viewEnrollmentDetails(enrollment)">Détails</button>
-            </td>
-          </tr>
+        <tr *ngFor="let enrollment of getFilteredEnrollments()">
+          <td data-label="Client">{{ enrollment.client.firstName }} {{ enrollment.client.lastName }}</td>
+          <td data-label="Email">{{ enrollment.client.email }}</td>
+          <td data-label="Date de demande">{{ formatDate(enrollment.dateCreated) }}</td>
+          <td data-label="Statut">
+        <span class="status-badge" [class]="getStatusClass(enrollment.status)">
+          {{ getStatusText(enrollment.status) }}
+        </span>
+          </td>
+          <td data-label="Actions">
+            <button class="btn-view" (click)="viewEnrollmentDetails(enrollment)">Détails</button>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>
@@ -55,7 +55,7 @@
         <h2>Détails de la demande</h2>
         <button class="close-btn" (click)="closeDetails()">&times;</button>
       </div>
-      
+
       <div class="modal-body">
         <div class="client-info">
           <h3>Informations du client</h3>
@@ -86,7 +86,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="enrollment-details">
           <h3>Détails de la demande</h3>
           <div class="info-grid">
@@ -115,7 +115,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="modal-footer" *ngIf="selectedEnrollment.status === 'pending'">
         <button class="btn-approve" (click)="approveEnrollment(selectedEnrollment)">Approuver</button>
         <div class="reject-container">

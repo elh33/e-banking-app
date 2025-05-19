@@ -249,3 +249,108 @@ tr:hover {
 .btn-reject:hover {
   background-color: #dc2626;
 }
+
+/* Style de base pour le tableau */
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-container th,
+.table-container td {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+/* Styles pour les écrans de taille moyenne et petite */
+@media screen and (max-width: 992px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .controls {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .search-bar, .filter-options {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .filter-options select {
+    width: 100%;
+  }
+}
+
+/* Styles pour les mobiles */
+@media screen and (max-width: 768px) {
+  /* Cacher l'en-tête du tableau */
+  .table-container thead {
+    display: none;
+  }
+
+  /* Transformer les lignes en cartes */
+  .table-container tbody tr {
+    display: block;
+    margin-bottom: 16px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+  }
+
+  /* Transformer les cellules */
+  .table-container tbody td {
+    display: flex;
+    padding: 10px 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  /* Ajouter les étiquettes pour chaque donnée */
+  .table-container tbody td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    width: 40%;
+    margin-right: 10px;
+  }
+
+  /* Style pour le bouton d'action */
+  .table-container .btn-view {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  /* Modal responsive */
+  .modal-content {
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Footer du modal responsive */
+  .modal-footer {
+    flex-direction: column;
+  }
+
+  .btn-approve, .reject-container {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .reject-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .reject-container input {
+    margin-bottom: 10px;
+  }
+}

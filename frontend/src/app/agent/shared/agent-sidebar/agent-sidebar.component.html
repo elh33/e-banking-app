@@ -1,6 +1,11 @@
-<div class="nav-items">
-  <div class="brand">
-    <h1>E-Bank Agent</h1>
+<div class="nav-items" [class.open]="isMobileMenuOpen" [class.compact-mode]="isCompactMode">
+  <div class="header-section">
+    <button class="toggle-button" (click)="toggleSideNav()">
+      <fa-icon [icon]="faBars"></fa-icon>
+    </button>
+    <div class="brand">
+      <h1>E-Bank Agent</h1>
+    </div>
   </div>
 
   <div class="nav-item" routerLink="/agent/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
@@ -24,7 +29,7 @@
   </div>
 
   <!-- Item de déconnexion -->
-  <div class="nav-item" (click)="openLogoutConfirm()">
+  <div class="nav-item logout" (click)="openLogoutConfirm()">
     <fa-icon [icon]="faSignOutAlt"></fa-icon>
     <span class="nav-text">Déconnexion</span>
   </div>
@@ -43,5 +48,5 @@
         <button class="confirm-btn" (click)="confirmLogout()">Déconnecter</button>
       </div>
     </div>
-</div>
+  </div>
 </div>

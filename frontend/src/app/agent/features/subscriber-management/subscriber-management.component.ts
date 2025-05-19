@@ -15,12 +15,12 @@ export class SubscriberManagementComponent implements OnInit {
   subscribers: Subscriber[] = [];
   filteredSubscribers: Subscriber[] = [];
   selectedSubscriber: Subscriber | null = null;
-  
+
   // Filters and search
   searchQuery: string = '';
   statusFilter: string = 'all';
   subscriptionTypeFilter: string = 'all';
-  
+
   isLoading = true;
 
   constructor(private subscriberService: SubscriberService) {}
@@ -50,11 +50,11 @@ export class SubscriberManagementComponent implements OnInit {
 
   applyFilters(): void {
     let result = [...this.subscribers];
-    
+
     // Apply search query if any
     if (this.searchQuery && this.searchQuery.trim() !== '') {
       const query = this.searchQuery.toLowerCase().trim();
-      result = result.filter(subscriber => 
+      result = result.filter(subscriber =>
         subscriber.firstName.toLowerCase().includes(query) ||
         subscriber.lastName.toLowerCase().includes(query) ||
         subscriber.email.toLowerCase().includes(query) ||
@@ -62,17 +62,17 @@ export class SubscriberManagementComponent implements OnInit {
         subscriber.subscriptionId.toLowerCase().includes(query)
       );
     }
-    
+
     // Apply status filter if not 'all'
     if (this.statusFilter !== 'all') {
       result = result.filter(subscriber => subscriber.subscriptionStatus === this.statusFilter);
     }
-    
+
     // Apply type filter if not 'all'
     if (this.subscriptionTypeFilter !== 'all') {
       result = result.filter(subscriber => subscriber.subscriptionType === this.subscriptionTypeFilter);
     }
-    
+
     this.filteredSubscribers = result;
   }
 
@@ -93,11 +93,11 @@ export class SubscriberManagementComponent implements OnInit {
         updatedSubscriber => {
           if (updatedSubscriber) {
             // Update the local list
-            this.subscribers = this.subscribers.map(s => 
+            this.subscribers = this.subscribers.map(s =>
               s.id === id ? updatedSubscriber : s
             );
             this.applyFilters();
-            
+
             // Update selected subscriber if currently viewing
             if (this.selectedSubscriber && this.selectedSubscriber.id === id) {
               this.selectedSubscriber = { ...updatedSubscriber };
@@ -115,11 +115,11 @@ export class SubscriberManagementComponent implements OnInit {
         updatedSubscriber => {
           if (updatedSubscriber) {
             // Update the local list
-            this.subscribers = this.subscribers.map(s => 
+            this.subscribers = this.subscribers.map(s =>
               s.id === id ? updatedSubscriber : s
             );
             this.applyFilters();
-            
+
             // Update selected subscriber if currently viewing
             if (this.selectedSubscriber && this.selectedSubscriber.id === id) {
               this.selectedSubscriber = { ...updatedSubscriber };
@@ -133,25 +133,25 @@ export class SubscriberManagementComponent implements OnInit {
 
   blockAccount(accountId: string): void {
     if (!this.selectedSubscriber) return;
-    
+
     if (confirm('Êtes-vous sûr de vouloir bloquer ce compte?')) {
       // Find the subscriber that owns this account
       const subscriberId = this.selectedSubscriber.id;
-      
+
       this.subscriberService.updateAccountStatus(subscriberId, accountId, 'blocked').subscribe(
         updatedAccount => {
           if (updatedAccount && this.selectedSubscriber) {
             // Update the selected subscriber's accounts
-            this.selectedSubscriber.accounts = this.selectedSubscriber.accounts.map(a => 
+            this.selectedSubscriber.accounts = this.selectedSubscriber.accounts.map(a =>
               a.id === accountId ? updatedAccount : a
             );
-            
+
             // Also update the main subscribers array
             this.subscribers = this.subscribers.map(s => {
               if (s.id === subscriberId) {
                 return {
                   ...s,
-                  accounts: s.accounts.map(a => 
+                  accounts: s.accounts.map(a =>
                     a.id === accountId ? updatedAccount : a
                   )
                 };
@@ -167,25 +167,25 @@ export class SubscriberManagementComponent implements OnInit {
 
   unblockAccount(accountId: string): void {
     if (!this.selectedSubscriber) return;
-    
+
     if (confirm('Êtes-vous sûr de vouloir débloquer ce compte?')) {
       // Find the subscriber that owns this account
       const subscriberId = this.selectedSubscriber.id;
-      
+
       this.subscriberService.updateAccountStatus(subscriberId, accountId, 'active').subscribe(
         updatedAccount => {
           if (updatedAccount && this.selectedSubscriber) {
             // Update the selected subscriber's accounts
-            this.selectedSubscriber.accounts = this.selectedSubscriber.accounts.map(a => 
+            this.selectedSubscriber.accounts = this.selectedSubscriber.accounts.map(a =>
               a.id === accountId ? updatedAccount : a
             );
-            
+
             // Also update the main subscribers array
             this.subscribers = this.subscribers.map(s => {
               if (s.id === subscriberId) {
                 return {
                   ...s,
-                  accounts: s.accounts.map(a => 
+                  accounts: s.accounts.map(a =>
                     a.id === accountId ? updatedAccount : a
                   )
                 };
@@ -201,27 +201,27 @@ export class SubscriberManagementComponent implements OnInit {
 
   toggleSubscriptionStatus(): void {
     if (!this.selectedSubscriber) return;
-    
+
     const newStatus = this.selectedSubscriber.subscriptionStatus === 'active' ? 'cancelled' : 'active';
-    const message = newStatus === 'active' 
-      ? 'Êtes-vous sûr de vouloir activer cet abonnement?' 
+    const message = newStatus === 'active'
+      ? 'Êtes-vous sûr de vouloir activer cet abonnement?'
       : 'Êtes-vous sûr de vouloir suspendre cet abonnement?';
-    
+
     if (confirm(message)) {
       this.subscriberService.updateSubscriptionStatus(
-        this.selectedSubscriber.id, 
+        this.selectedSubscriber.id,
         newStatus as 'active' | 'expired' | 'cancelled'
       ).subscribe(
         updatedSubscriber => {
           if (updatedSubscriber) {
             // Update the selected subscriber
             this.selectedSubscriber = { ...updatedSubscriber };
-            
+
             // Update the main subscribers array
-            this.subscribers = this.subscribers.map(s => 
+            this.subscribers = this.subscribers.map(s =>
               s.id === updatedSubscriber.id ? updatedSubscriber : s
             );
-            
+
             // Re-apply filters
             this.applyFilters();
           }
@@ -233,10 +233,10 @@ export class SubscriberManagementComponent implements OnInit {
 
   updateSubscriptionType(): void {
     if (!this.selectedSubscriber) return;
-    
+
     const options = ['standard', 'premium', 'vip'];
     const currentIndex = options.indexOf(this.selectedSubscriber.subscriptionType);
-    
+
     const selectElement = document.createElement('select');
     options.forEach(option => {
       const optElement = document.createElement('option');
@@ -247,27 +247,27 @@ export class SubscriberManagementComponent implements OnInit {
       }
       selectElement.appendChild(optElement);
     });
-    
+
     const result = prompt(
-      'Choisissez un nouveau type d\'abonnement:', 
+      'Choisissez un nouveau type d\'abonnement:',
       this.selectedSubscriber.subscriptionType
     );
-    
+
     if (result && options.includes(result)) {
       this.subscriberService.updateSubscriptionType(
-        this.selectedSubscriber.id, 
+        this.selectedSubscriber.id,
         result as 'standard' | 'premium' | 'vip'
       ).subscribe(
         updatedSubscriber => {
           if (updatedSubscriber) {
             // Update the selected subscriber
             this.selectedSubscriber = { ...updatedSubscriber };
-            
+
             // Update the main subscribers array
-            this.subscribers = this.subscribers.map(s => 
+            this.subscribers = this.subscribers.map(s =>
               s.id === updatedSubscriber.id ? updatedSubscriber : s
             );
-            
+
             // Re-apply filters
             this.applyFilters();
           }

@@ -4,23 +4,23 @@
         <h1>Gestion des clients</h1>
         <p>Gérez les clients et leurs informations personnelles</p>
       </div>
-      
+
       <div class="action-section">
         <div class="search-box">
-          <input 
-            type="text" 
-            placeholder="Rechercher un client..." 
+          <input
+            type="text"
+            placeholder="Rechercher un client..."
             [(ngModel)]="searchQuery"
             (input)="onSearch()"
           >
         </div>
-        
+
         <button class="add-client-btn" (click)="showAddClientModal()">
           + Nouveau client
         </button>
       </div>
     </div>
-    
+
     <div class="filters-section">
       <div class="filter-group">
         <label>Statut:</label>
@@ -33,19 +33,19 @@
         </select>
       </div>
     </div>
-    
+
     <div *ngIf="isLoading" class="loading-indicator">
       <div class="spinner"></div>
       <p>Chargement des clients...</p>
     </div>
-    
+
     <div *ngIf="!isLoading && filteredClients.length === 0" class="empty-state">
       <div class="empty-icon">🔍</div>
       <p>Aucun client ne correspond à votre recherche</p>
       <button class="reset-search-btn" (click)="resetFilters()">Réinitialiser la recherche</button>
     </div>
-    
-    <div *ngIf="!isLoading && filteredClients.length > 0" class="clients-table-container">
+
+    <div *ngIf="!isLoading && filteredClients.length > 0" class="clients-table-container table-container">
       <table class="clients-table">
         <thead>
           <tr>
@@ -59,44 +59,42 @@
         </thead>
         <tbody>
           <tr *ngFor="let client of filteredClients">
-            <td>{{ client.id.substring(0, 8) }}</td>
-            <td>{{ client.firstName }} {{ client.lastName }}</td>
-            <td>{{ client.email }}</td>
-            <td>{{ client.phone || 'Non renseigné' }}</td>
-            <td>
-              <span class="status-badge" [ngClass]="client.status">
-                {{ client.status === 'active' ? 'Actif' :
-                   client.status === 'pending' ? 'En attente' :
-                   client.status === 'suspended' ? 'Suspendu' : 'Fermé' }}
-              </span>
+            <td data-label="ID">{{ client.id.substring(0, 8) }}</td>
+            <td data-label="Nom">{{ client.firstName }} {{ client.lastName }}</td>
+            <td data-label="Email">{{ client.email }}</td>
+            <td data-label="Téléphone">{{ client.phone || 'Non renseigné' }}</td>
+            <td data-label="Statut">
+        <span class="status-badge" [ngClass]="client.status">
+          {{ client.status === 'active' ? 'Actif' :
+          client.status === 'pending' ? 'En attente' :
+            client.status === 'suspended' ? 'Suspendu' : 'Fermé' }}
+        </span>
             </td>
-            <td>
-                <div class="action-buttons">
-                    <button class="view-btn" (click)="viewClient(client.id)">
-                      <span class="btn-icon">👁️</span>
-                    </button>
-                    <button class="edit-btn" (click)="editClient(client)">
-                      <span class="btn-icon">✏️</span>
-                    </button>
-                    <div class="dropdown">
-                      <button class="more-btn" (click)="toggleDropdown(client.id)">
-                        <span class="btn-icon">⋮</span>
-                      </button>
-                      
-                      <!-- Menu for additional actions -->
-                      <div class="dropdown-menu" *ngIf="activeDropdown === client.id">
-                        <button *ngIf="client.status !== 'active'" (click)="activateClient(client.id)">Activer</button>
-                        <button *ngIf="client.status === 'active'" (click)="suspendClient(client.id)">Suspendre</button>
-                        <button (click)="deleteClient(client.id)">Supprimer</button>
-                      </div>
-                    </div>
+            <td data-label="Actions">
+              <div class="action-buttons">
+                <button class="view-btn" (click)="viewClient(client.id)">
+                  <span class="btn-icon">👁️</span>
+                </button>
+                <button class="edit-btn" (click)="editClient(client)">
+                  <span class="btn-icon">✏️</span>
+                </button>
+                <div class="dropdown">
+                  <button class="more-btn" (click)="toggleDropdown(client.id)">
+                    <span class="btn-icon">⋮</span>
+                  </button>
+                  <div class="dropdown-menu" *ngIf="activeDropdown === client.id">
+                    <button *ngIf="client.status !== 'active'" (click)="activateClient(client.id)">Activer</button>
+                    <button *ngIf="client.status === 'active'" (click)="suspendClient(client.id)">Suspendre</button>
+                    <button (click)="deleteClient(client.id)">Supprimer</button>
                   </div>
+                </div>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-  
+
     <!-- Client Modal (Add/Edit) -->
     <div *ngIf="showClientModal" class="modal-overlay">
       <div class="modal-container">
@@ -104,7 +102,7 @@
           <h2>{{ isEditMode ? 'Modifier le client' : 'Ajouter un client' }}</h2>
           <button class="close-btn" (click)="closeModal()">&times;</button>
         </div>
-        
+
         <div class="modal-body">
           <form [formGroup]="clientForm" (ngSubmit)="saveClient()">
             <div class="form-row">
@@ -120,7 +118,7 @@
                   Le prénom est requis
                 </div>
               </div>
-              
+
               <div class="form-group">
                 <label for="lastName">Nom *</label>
                 <input
@@ -134,7 +132,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="form-row">
               <div class="form-group">
                 <label for="email">Email *</label>
@@ -148,30 +146,30 @@
                   Email invalide ou requis
                 </div>
               </div>
-              
+
               <div class="form-group">
                 <label for="phone">Téléphone</label>
                 <input type="tel" id="phone" formControlName="phone">
               </div>
             </div>
-            
+
             <div class="form-group">
               <label for="address">Adresse</label>
               <input type="text" id="address" formControlName="address">
             </div>
-            
+
             <div class="form-row">
               <div class="form-group">
                 <label for="nationalId">Pièce d'identité</label>
                 <input type="text" id="nationalId" formControlName="nationalId">
               </div>
-              
+
               <div class="form-group">
                 <label for="dateOfBirth">Date de naissance</label>
                 <input type="date" id="dateOfBirth" formControlName="dateOfBirth">
               </div>
             </div>
-            
+
             <div class="form-group" *ngIf="isEditMode">
               <label for="status">Statut</label>
               <select id="status" formControlName="status">
@@ -183,12 +181,12 @@
             </div>
           </form>
         </div>
-        
+
         <div class="modal-footer">
           <button class="cancel-btn" (click)="closeModal()">Annuler</button>
-          <button 
-            class="save-btn" 
-            [disabled]="clientForm.invalid || isSubmitting" 
+          <button
+            class="save-btn"
+            [disabled]="clientForm.invalid || isSubmitting"
             (click)="saveClient()"
           >
             {{ isEditMode ? 'Enregistrer' : 'Créer' }}
@@ -196,7 +194,7 @@
         </div>
       </div>
     </div>
-  
+
     <!-- Client Details Modal -->
     <div *ngIf="selectedClient" class="modal-overlay">
       <div class="modal-container">
@@ -204,49 +202,49 @@
           <h2>Détails du client</h2>
           <button class="close-btn" (click)="closeClientDetails()">&times;</button>
         </div>
-        
+
         <div class="modal-body">
           <div class="client-details">
             <div class="detail-section">
               <h3>Informations personnelles</h3>
-              
+
               <div class="detail-row">
                 <div class="detail-label">ID:</div>
                 <div class="detail-value">{{ selectedClient.id }}</div>
               </div>
-              
+
               <div class="detail-row">
                 <div class="detail-label">Nom complet:</div>
                 <div class="detail-value">{{ selectedClient.firstName }} {{ selectedClient.lastName }}</div>
               </div>
-              
+
               <div class="detail-row">
                 <div class="detail-label">Email:</div>
                 <div class="detail-value">{{ selectedClient.email }}</div>
               </div>
-              
+
               <div class="detail-row">
                 <div class="detail-label">Téléphone:</div>
                 <div class="detail-value">{{ selectedClient.phone || 'Non renseigné' }}</div>
               </div>
-              
+
               <div class="detail-row">
                 <div class="detail-label">Adresse:</div>
                 <div class="detail-value">{{ selectedClient.address || 'Non renseignée' }}</div>
               </div>
-              
+
               <div class="detail-row">
                 <div class="detail-label">Pièce d'identité:</div>
                 <div class="detail-value">{{ selectedClient.nationalId || 'Non renseignée' }}</div>
               </div>
-              
+
               <div class="detail-row">
                 <div class="detail-label">Date de naissance:</div>
                 <div class="detail-value">
                   {{ selectedClient.dateOfBirth ? (selectedClient.dateOfBirth | date:'dd/MM/yyyy') : 'Non renseignée' }}
                 </div>
               </div>
-              
+
               <div class="detail-row">
                 <div class="detail-label">Statut:</div>
                 <div class="detail-value">
