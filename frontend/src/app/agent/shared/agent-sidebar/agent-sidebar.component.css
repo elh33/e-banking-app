@@ -252,7 +252,7 @@
   border-radius: 8px;
   width: 400px;
   max-width: 90%;
-  overflow咨: hidden;
+  overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   animation: modal-appear 0.3s ease-out;
 }
