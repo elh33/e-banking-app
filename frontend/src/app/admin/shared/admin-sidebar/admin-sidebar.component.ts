@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, HostListener, Inject, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { AdminService } from '../../core/services/admin.service';
-import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import {
   faChartLine,
@@ -12,7 +10,8 @@ import {
   faSignOutAlt,
   faMoneyBillWave,
   faExchangeAlt,
-  faGlobe
+  faGlobe,
+  faBars
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -22,7 +21,7 @@ import {
   templateUrl: './admin-sidebar.component.html',
   styleUrls: ['./admin-sidebar.component.css']
 })
-export class AdminSidebarComponent {
+export class AdminSidebarComponent implements OnInit {
   // FontAwesome icons
   faChartLine = faChartLine;
   faUsers = faUsers;
@@ -31,10 +30,74 @@ export class AdminSidebarComponent {
   faMoneyBillWave = faMoneyBillWave;
   faExchangeAlt = faExchangeAlt;
   faGlobe = faGlobe;
+  faBars = faBars;
 
   showLogoutConfirm = false;
+  isCompactMode = false;
+  isMobile = false;
+  isFullScreen = false;
+  isMobileMenuOpen = false;
 
-  constructor(private authService: AuthService) {}
+  @Output() compactModeChanged = new EventEmitter<boolean>();
+  @Output() mobileMenuToggled = new EventEmitter<boolean>();
+
+  private resizeTimeout: any;
+
+  constructor(private authService: AuthService, @Inject(PLATFORM_ID) private platformId: Object) {}
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkScreenWidth();
+    }
+  }
+
+  toggleSideNav(): void {
+    if (this.isMobile) {
+      this.isMobileMenuOpen = !this.isMobileMenuOpen;
+      this.updateContainerClass();
+      this.mobileMenuToggled.emit(this.isMobileMenuOpen);
+    } else {
+      this.isCompactMode = !this.isCompactMode;
+      this.updateContainerClass();
+      this.compactModeChanged.emit(this.isCompactMode);
+    }
+  }
+
+  private updateContainerClass(): void {
+    const container = document.querySelector('.nav-container');
+    if (container) {
+      if (this.isMobile && this.isMobileMenuOpen) {
+        container.classList.add('open');
+      } else if (this.isMobile) {
+        container.classList.remove('open');
+      }
+    }
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (isPlatformBrowser(this.platformId)) {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(() => this.checkScreenWidth(), 200);
+    }
+  }
+
+  private checkScreenWidth(): void {
+    const width = window.innerWidth;
+    this.isMobile = width <= 768;
+    this.isFullScreen = width > 1300;
+
+    if (this.isMobile) {
+      this.isCompactMode = false;
+      this.isMobileMenuOpen = false;
+      this.mobileMenuToggled.emit(this.isMobileMenuOpen);
+    } else if (this.isFullScreen) {
+      this.isCompactMode = false;
+    } else {
+      this.isCompactMode = true;
+    }
+    this.compactModeChanged.emit(this.isCompactMode);
+  }
 
   openLogoutConfirm(): void {
     this.showLogoutConfirm = true;

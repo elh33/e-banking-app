@@ -65,12 +65,8 @@ export class SideNavComponent implements OnInit {
   }
 
   toggleSideNav(): void {
-    console.log('toggleSideNav called. isMobile:', this.isMobile, 'Current state:', {
-      isCompactMode: this.isCompactMode,
-      isMobile: this.isMobile,
-      isMobileMenuOpen: this.isMobileMenuOpen
-    });
     if (this.isMobile) {
+      this.isMobileMenuOpen = !this.isMobileMenuOpen;
       this.updateContainerClass();
       this.mobileMenuToggled.emit(this.isMobileMenuOpen);
     } else {

@@ -4,7 +4,7 @@
         <h1>Paramètres Globaux</h1>
         <p>Configurez les paramètres globaux du système bancaire</p>
       </div>
-      
+
       <div class="actions">
         <div class="search-bar">
           <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher...">
@@ -15,23 +15,23 @@
         </button>
       </div>
     </div>
-  
+
     <!-- Category Filter -->
     <div class="category-filter">
-      <button 
-        *ngFor="let category of categories" 
+      <button
+        *ngFor="let category of categories"
         [class.active]="selectedCategory === category"
         (click)="filterByCategory(category)"
       >
         {{ category }}
       </button>
     </div>
-  
+
     <!-- Setting Form -->
     <div class="form-container" *ngIf="showForm">
       <div class="form-card">
         <h2>{{ isEditing ? 'Modifier le Paramètre' : 'Ajouter un Nouveau Paramètre' }}</h2>
-        
+
         <form [formGroup]="settingForm" (ngSubmit)="onSubmit()">
           <div class="form-grid">
             <div class="form-group">
@@ -41,7 +41,7 @@
                 La clé est requise (Majuscules, chiffres et underscores uniquement)
               </div>
             </div>
-            
+
             <div class="form-group">
               <label for="value">Valeur</label>
               <input type="text" id="value" formControlName="value" placeholder="Ex: 50000">
@@ -49,7 +49,7 @@
                 La valeur est requise
               </div>
             </div>
-            
+
             <div class="form-group">
               <label for="category">Catégorie</label>
               <select id="category" formControlName="category">
@@ -60,7 +60,7 @@
                 <option value="OTHER">OTHER</option>
               </select>
             </div>
-            
+
             <div class="form-group checkbox">
               <label>
                 <input type="checkbox" formControlName="isEncrypted">
@@ -68,7 +68,7 @@
               </label>
             </div>
           </div>
-          
+
           <div class="form-group wide">
             <label for="description">Description</label>
             <textarea id="description" formControlName="description" rows="3" placeholder="Description du paramètre..."></textarea>
@@ -76,7 +76,7 @@
               La description est requise
             </div>
           </div>
-          
+
           <div class="form-actions">
             <button type="button" class="btn-cancel" (click)="resetForm()">Annuler</button>
             <button type="submit" class="btn-submit" [disabled]="settingForm.invalid">
@@ -86,7 +86,7 @@
         </form>
       </div>
     </div>
-  
+
     <!-- Settings List -->
     <div class="settings-list" *ngIf="!isLoading; else loadingTemplate">
       <div class="table-responsive">
@@ -104,13 +104,13 @@
           </thead>
           <tbody>
             <tr *ngFor="let setting of getFilteredSettings()">
-              <td><strong>{{ setting.key }}</strong></td>
-              <td>{{ setting.isEncrypted ? '••••••••' : setting.value }}</td>
-              <td><span class="category-badge" [attr.data-category]="setting.category">{{ setting.category }}</span></td>
-              <td class="description-cell">{{ setting.description }}</td>
-              <td><span class="security-badge" [class.secured]="setting.isEncrypted">{{ setting.isEncrypted ? 'Oui' : 'Non' }}</span></td>
-              <td>{{ formatDate(setting.updatedAt) }}</td>
-              <td class="actions-cell">
+              <td data-label="Clé"><strong>{{ setting.key }}</strong></td>
+              <td data-label="Valeur">{{ setting.isEncrypted ? '••••••••' : setting.value }}</td>
+              <td data-label="Catégorie"><span class="category-badge" [attr.data-category]="setting.category">{{ setting.category }}</span></td>
+              <td data-label="Description" class="description-cell">{{ setting.description }}</td>
+              <td data-label="Sécurisé"><span class="security-badge" [class.secured]="setting.isEncrypted">{{ setting.isEncrypted ? 'Oui' : 'Non' }}</span></td>
+              <td data-label="Dérnière Mise à jour">{{ formatDate(setting.updatedAt) }}</td>
+              <td data-label="Actions" class="actions-cell">
                 <button class="btn-action edit" (click)="editSetting(setting)" title="Modifier">
                   <fa-icon [icon]="faEdit"></fa-icon>
                 </button>
@@ -123,14 +123,14 @@
         </table>
       </div>
     </div>
-  
+
     <ng-template #loadingTemplate>
       <div class="loading-container">
         <div class="spinner"></div>
         <p>Chargement des paramètres...</p>
       </div>
     </ng-template>
-  
+
     <ng-template #noSettings>
       <div class="no-data-container">
         <p>Aucun paramètre trouvé pour la catégorie {{ selectedCategory }}.</p>

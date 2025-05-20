@@ -400,6 +400,9 @@
 .update-btn:hover {
   background-color: #bbdefb;
 }
+.table-container{
+  overflow-x: auto;
+}
 
 /* Réutiliser les styles du tableau responsive */
 .table-container table {

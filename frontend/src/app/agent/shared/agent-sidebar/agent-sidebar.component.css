@@ -115,15 +115,12 @@
 @media only screen and (max-width: 1300px) and (min-width: 769px) {
   .nav-items .nav-item {
     padding: 20px 30px;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
-  .nav-items .nav-item span {
-    display: none;
-  }
 
   .nav-items .nav-item fa-icon {
-    margin-right: 0;
+    margin-right: 20px;
   }
 
   .nav-items .brand h1 {
