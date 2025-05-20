@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, switchMap, BehaviorSubject } from 'rxjs';
 import { Client } from '../models/Client.model';
+import { AccountService } from './account.service';
 
 interface AccountDisplaySetting {
   visible: boolean;
+  accountId: number;
 }
 
 interface NotificationSettings {
@@ -28,28 +30,9 @@ export class SettingsService {
     phone: "0612345678",
     address: "123 Avenue de Paris, 75000 Paris",
     birthday: new Date(1985, 5, 15),
-    password: "", // Ne jamais stocker les mots de passe en clair
+    password: "",
     role: 'client',
-    Accounts: [
-      {
-        id: 1,
-        accountNumber: "FR7630001007941234567890185",
-        type: "courant",
-        balance: 2500,
-        currency: "EUR",
-        limit: 1000,
-        dateCrea: new Date(2018, 3, 10)
-      },
-      {
-        id: 2,
-        accountNumber: "FR7630004000031234567890143",
-        type: "epargne",
-        balance: 15000,
-        currency: "EUR",
-        limit: 0,
-        dateCrea: new Date(2019, 7, 22)
-      }
-    ]
+    Accounts: [] // Les comptes seront récupérés depuis AccountService
   };
 
   private mockNotificationSettings: NotificationSettings = {
@@ -57,38 +40,77 @@ export class SettingsService {
     monthlyReport: false
   };
 
-  constructor(private http: HttpClient) {}
+  // Variable pour stocker les préférences d'affichage en mémoire
+  private accountDisplaySettingsSubject = new BehaviorSubject<AccountDisplaySetting[]>([]);
+
+  constructor(private http: HttpClient, private accountService: AccountService) {
+    // Initialiser les préférences d'affichage lors de la création du service
+    this.initDisplaySettings();
+  }
+
+  private initDisplaySettings(): void {
+    this.accountService.getAccounts().subscribe(accounts => {
+      const defaultSettings = accounts.map(account => ({
+        visible: true,
+        accountId: account.id
+      }));
+      this.accountDisplaySettingsSubject.next(defaultSettings);
+    });
+  }
 
   getClientData(): Observable<Client> {
-    // En production, utiliser: return this.http.get<Client>(`${this.apiUrl}/current`);
-    return of(this.mockClient);
+    return this.accountService.getAccounts().pipe(
+      switchMap(accounts => {
+        const clientWithAccounts = {
+          ...this.mockClient,
+          Accounts: accounts
+        };
+        return of(clientWithAccounts);
+      })
+    );
   }
 
   updateClientData(client: Client): Observable<Client> {
-    // En production, utiliser: return this.http.put<Client>(`${this.apiUrl}/${client.id}`, client);
-    this.mockClient = {...client};
-    return of(this.mockClient);
+    const { Accounts, ...clientDataWithoutAccounts } = client;
+    this.mockClient = {
+      ...clientDataWithoutAccounts,
+      Accounts: []
+    };
+    return of({...this.mockClient, Accounts: client.Accounts});
   }
 
   getAccountDisplaySettings(): Observable<AccountDisplaySetting[]> {
-    // En production, récupérer depuis le backend
-    const storedSettings = localStorage.getItem('accountDisplaySettings');
-    return of(storedSettings ? JSON.parse(storedSettings) : []);
+    return this.accountService.getAccounts().pipe(
+      switchMap(accounts => {
+        const currentSettings = this.accountDisplaySettingsSubject.value;
+
+        // Si les paramètres existent déjà et correspondent au nombre de comptes
+        if (currentSettings.length === accounts.length) {
+          return of(currentSettings);
+        }
+
+        // Sinon, créer des paramètres par défaut
+        const settings = accounts.map((_, i) =>
+          currentSettings[i] || { visible: true }
+        );
+
+        this.accountDisplaySettingsSubject.next(settings);
+        return of(settings);
+      })
+    );
   }
 
   saveAccountDisplaySettings(settings: AccountDisplaySetting[]): Observable<boolean> {
-    // En production, envoyer au backend
-    localStorage.setItem('accountDisplaySettings', JSON.stringify(settings));
+    // Stocker en mémoire uniquement
+    this.accountDisplaySettingsSubject.next([...settings]);
     return of(true);
   }
 
   getNotificationSettings(): Observable<NotificationSettings> {
-    // En production, récupérer depuis le backend
     return of(this.mockNotificationSettings);
   }
 
   saveNotificationSettings(settings: NotificationSettings): Observable<boolean> {
-    // En production, envoyer au backend
     this.mockNotificationSettings = {...settings};
     return of(true);
   }

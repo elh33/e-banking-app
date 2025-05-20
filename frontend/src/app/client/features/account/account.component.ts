@@ -6,6 +6,7 @@ import { faDownload, faFilter, faEye, faSort, faSortUp, faSortDown } from '@fort
 import { Account } from '../../core/models/account.model';
 import { TransactionComponent } from '../transaction/transaction.component';
 import { AccountService } from '../../core/services/account.service';
+import { SettingsService } from '../../core/services/settings.service';
 
 @Component({
   selector: 'app-account',
@@ -28,7 +29,10 @@ export class AccountComponent implements OnInit {
 
   // Données
   accounts: Account[] = [];
+  visibleAccounts: Account[] = [];
   selectedAccount: Account | null = null;
+  accountDisplaySettings: {visible: boolean}[] = [];
+
 
   // Filtres
   dateFrom: string = '';
@@ -37,7 +41,7 @@ export class AccountComponent implements OnInit {
   amountMin: number | null = null;
   amountMax: number | null = null;
 
-  constructor(private accountService: AccountService) {}
+  constructor(private accountService: AccountService, private settingsService: SettingsService) {}
 
   ngOnInit(): void {
     this.loadAccounts();
@@ -46,7 +50,23 @@ export class AccountComponent implements OnInit {
   loadAccounts(): void {
     this.accountService.getAccounts().subscribe(accounts => {
       this.accounts = accounts;
+      this.loadDisplaySettings();
     });
+  }
+
+  loadDisplaySettings(): void {
+    this.settingsService.getAccountDisplaySettings().subscribe(settings => {
+      this.accountDisplaySettings = settings;
+      this.filterVisibleAccounts();
+    });
+  }
+
+  filterVisibleAccounts(): void {
+    if (!this.accounts.length || !this.accountDisplaySettings.length) return;
+
+    this.visibleAccounts = this.accounts.filter((account, index) =>
+      this.accountDisplaySettings[index]?.visible
+    );
   }
 
   selectAccount(account: Account): void {

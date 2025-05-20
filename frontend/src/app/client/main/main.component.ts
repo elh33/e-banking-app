@@ -8,27 +8,9 @@ import { TransactionComponent } from '../features/transaction/transaction.compon
   selector: 'app-main',
   standalone: true,
   imports: [CommonModule, QuickActionComponent, AccountComponent, TransactionComponent],
-  template: `
-    <div class="main-content">
-      <h1>Tableau de bord</h1>
-      <p>Bienvenue sur votre espace bancaire personnel</p>
-      
-      <section class="quick-actions-container">
-        <app-quick-action type="virement"></app-quick-action>
-        <app-quick-action type="crypto"></app-quick-action>
-        <app-quick-action type="recharge"></app-quick-action>
-      </section>
-      
-      <section>
-        <app-account [displayMode]="'summary'"></app-account>
-      </section>
-      
-      <section class="recent-transactions">
-        <h2>Transactions récentes</h2>
-        <app-transaction [displayMode]="'summary'"></app-transaction>
-      </section>
-    </div>
-  `,
+  templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent {}
+export class MainComponent {
+
+}

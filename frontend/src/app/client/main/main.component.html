@@ -1,5 +1,19 @@
-<div class="quick-action-card">
-  <div class="icon">{{ icon }}</div>
-  <h3>{{ title }}</h3>
-  <button class="action-button" (click)="navigateToAction()">Lancer</button>
+<div class="main-content">
+  <h1>Tableau de bord</h1>
+  <p>Bienvenue sur votre espace bancaire personnel</p>
+
+  <section class="quick-actions-container">
+    <app-quick-action type="virement"></app-quick-action>
+    <app-quick-action type="crypto"></app-quick-action>
+    <app-quick-action type="recharge"></app-quick-action>
+  </section>
+
+  <section>
+    <app-account [displayMode]="'summary'"></app-account>
+  </section>
+
+  <section class="recent-transactions">
+    <h2>Transactions récentes</h2>
+    <app-transaction [displayMode]="'summary'"></app-transaction>
+  </section>
 </div>

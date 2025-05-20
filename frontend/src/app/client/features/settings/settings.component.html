@@ -53,26 +53,28 @@
     <div class="settings-main">
       <div class="settings-group">
         <h4>Coordonnées</h4>
-        <div class="form-group">
+        <div class="form-group readonly">
           <label for="client-email">Email</label>
-          <input type="email" id="client-email" [(ngModel)]="client.email">
+          <input type="email" id="client-email" [value]="client.email" readonly>
         </div>
-        <div class="form-group">
+        <div class="form-group readonly">
           <label for="client-phone">Téléphone</label>
-          <input type="tel" id="client-phone" [(ngModel)]="client.phone">
+          <input type="tel" id="client-phone" [value]="client.phone" readonly>
         </div>
-        <div class="form-group">
+        <div class="form-group readonly">
           <label for="client-address">Adresse</label>
-          <textarea id="client-address" [(ngModel)]="client.address"></textarea>
+          <input id="client-address" [value]="client.address" readonly>
         </div>
       </div>
 
-      <div class="settings-group">
-        <h4>Préférences d'affichage</h4>
-        <div *ngFor="let account of client.Accounts; let i = index" class="form-check">
-          <input type="checkbox" [id]="'show-account-' + i" [(ngModel)]="accountDisplaySettings[i].visible">
-          <label [for]="'show-account-' + i">Afficher le compte {{account.accountNumber}}</label>
-        </div>
+      <div *ngFor="let account of client.Accounts" class="form-check">
+        <input type="checkbox"
+               [id]="'show-account-' + account.id"
+               [(ngModel)]="getAccountSetting(account.id).visible"
+               (change)="onCheckboxChange(account.id, getAccountSetting(account.id).visible)">
+        <label [for]="'show-account-' + account.id">
+          Compte {{account.type}}: {{account.accountNumber}}
+        </label>
       </div>
 
       <div class="settings-group">

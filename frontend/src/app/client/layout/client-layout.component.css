@@ -1,6 +1,5 @@
 /* Main container */
 .main-container {
-  isplay: flex;
   min-height: 100vh;
   width: 100%;
   background-color: #f9fafb;

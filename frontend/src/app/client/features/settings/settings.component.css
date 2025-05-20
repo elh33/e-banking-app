@@ -226,3 +226,34 @@
     gap: 10px;
   }
 }
+
+.form-check {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.form-check input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  cursor: pointer;
+  accent-color: #0d6efd;
+}
+
+.checkbox-label {
+  cursor: pointer;
+  user-select: none;
+  flex: 1;
+}
+
+.checkbox-label:hover {
+  color: #0d6efd;
+}
+
+.help-text {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin-top: 10px;
+  font-style: italic;
+}

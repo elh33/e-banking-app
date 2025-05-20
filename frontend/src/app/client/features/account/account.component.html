@@ -3,7 +3,7 @@
   <h3>Résumé des comptes</h3>
 
   <div class="account-summary-list">
-    <div class="card-summary" *ngFor="let account of accounts">
+    <div class="card-summary" *ngFor="let account of visibleAccounts">
       <div class="balance">
         <strong>{{ account.type }}</strong>
         <h2>{{ account.balance }} {{ account.currency }}</h2>
@@ -14,6 +14,9 @@
         <div class="card-number">**** **** **** {{ account.accountNumber.slice(-4) }}</div>
       </div>
     </div>
+  </div>
+  <div *ngIf="visibleAccounts.length === 0" class="no-accounts-message">
+    <p>Aucun compte à afficher. Modifiez vos préférences d'affichage dans les paramètres.</p>
   </div>
 </div>
 
