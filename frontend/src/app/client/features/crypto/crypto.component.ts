@@ -1,4 +1,3 @@
-// src/app/features/crypto/crypto.component.ts
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -7,11 +6,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowUp, faArrowDown, faHistory, faClock } from '@fortawesome/free-solid-svg-icons';
 import { CryptoService } from '../../core/services/crypto.service';
 import { AccountService } from '../../core/services/account.service';
+import { Account } from '../../core/models/account.model';
 import { Crypto, CryptoBalance, CryptoTransaction } from '../../core/models/Crypto.model';
 import { Subscription } from 'rxjs';
 import { ChartData, ChartOptions } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { Account } from '../../core/models/account.model';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-crypto',

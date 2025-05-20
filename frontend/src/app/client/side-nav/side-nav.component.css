@@ -1,35 +1,17 @@
-/* Sidenav container */
-.nav-container {
-  height: 100vh;
-  width: 280px;
-  background-color: #e2e8f0;
-  transition: width 0.3s ease, transform 0.3s ease;
+/* Navigation items */
+.nav-items {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 1000;
-  overflow-y: auto;
-}
-
-/* Navigation items */
-.nav-items {
-  width: 100%;
+  width: 280px;
   height: 100%;
   color: #374151;
   display: flex;
   flex-direction: column;
-  padding-top: 10px;
+  padding-top: 20px;
+  box-shadow: 5px 0 10px rgba(0, 0, 0, 0.05);
   font-family: 'Segoe UI', sans-serif;
-  background-color: inherit;
-}
-
-/* Compact mode */
-.nav-container.compact-mode {
-  width: 80px;
-}
-
-.nav-items.compact-mode {
-  width: 80px;
+  transition: width 0.3s ease, transform 0.3s ease;
 }
 
 /* Header section */
@@ -43,40 +25,18 @@
   position: relative;
 }
 
-/* Toggle button */
-.toggle-button {
-  position: absolute;
-  top: 10px;
-  right: 5px; /* Adjusted for compact mode */
-  background: none;
-  color: #1e68c6;
-  border: none;
-  width: 25px; /* Slightly smaller for compact mode */
-  height: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 15px; /* Adjusted size */
-  transition: color 0.2s ease;
-  z-index: 1001;
-}
-
-.toggle-button {
-  display: flex !important; /* Always visible */
-}
-
-.toggle-button:hover {
-  color: #1e68c6;
-  font-size: 18px;
-}
-
-
 /* Brand styling */
 .nav-items .brand {
   text-align: center;
   padding: 0 10px;
   margin-top: 40px;
+  font-size: 20px;
+  font-weight: 700;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
 }
 
 .nav-items .brand h1 {
@@ -84,6 +44,35 @@
   margin: 0;
   font-weight: 700;
   color: #1e293b;
+  transition: font-size 0.3s ease;
+}
+
+/* Toggle button */
+.toggle-button {
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  background: none;
+  color: #1e68c6;
+  border: none;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 15px;
+  transition: color 0.2s ease;
+  z-index: 1001;
+}
+
+/*.toggle-button {*/
+/*  display: flex !important; !* Always visible *!*/
+/*}*/
+
+.toggle-button:hover {
+  color: #1e68c6;
+  font-size: 18px;
 }
 
 /* Navigation items */
@@ -120,14 +109,129 @@
   border-left: 3px solid #6b4ce6;
 }
 
-/* Compact mode adjustments */
+.nav-item.active fa-icon {
+  color: #6366f1;
+}
+
+/* Élément de déconnexion */
+.nav-item.logout {
+  margin-top: auto;
+  margin-bottom: 20px;
+}
+
+.nav-item.logout fa-icon {
+  color: #f87171;
+}
+
+/* Mode compact pour tablettes */
+@media only screen and (max-width: 1300px) and (min-width: 769px) {
+  .nav-items .nav-item {
+    padding: 20px 30px;
+    justify-content: flex-start;
+  }
+
+
+  .nav-items .nav-item fa-icon {
+    margin-right: 20px;
+  }
+
+  .nav-items .brand h1 {
+    font-size: 16px;
+  }
+}
+
+/* Mobile adjustments */
+@media only screen and (max-width: 768px) {
+  .nav-items {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px !important;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    background-color: #fff; /* Assurez-vous qu'il a un fond */
+  }
+
+  .nav-items.open {
+    transform: translateX(0);
+  }
+
+  .nav-items .nav-item {
+    padding: 20px 35px;
+    justify-content: flex-start;
+  }
+
+  .nav-items .nav-item span {
+    display: block !important;
+  }
+
+  .nav-items .nav-item fa-icon {
+    margin-right: 20px;
+  }
+
+  .nav-items .brand h1 {
+    font-size: 24px;
+  }
+
+  .toggle-button {
+    position: absolute;
+    top: 10px;
+    right: -40px;
+    background: #cbd5e1;
+    color: #ffffff;
+    border-radius: 0 4px 4px 0;
+    width: 40px;
+    height: 40px;
+    z-index: 1001;
+  }
+
+  .toggle-button:hover {
+    color: #ffffff;
+  }
+
+  .nav-item.logout {
+    margin-top: auto;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .nav-items.compact-mode {
+    width: 280px !important;
+    transform: translateX(-100%);
+  }
+
+  .nav-items.compact-mode.open {
+    transform: translateX(0);
+  }
+
+  .nav-items.compact-mode .nav-item {
+    padding: 20px 35px;
+    justify-content: flex-start;
+  }
+
+  .nav-items.compact-mode .nav-item span {
+    display: block !important;
+  }
+
+  .nav-items.compact-mode .nav-item fa-icon {
+    margin-right: 20px;
+  }
+}
+
+/* Styles pour le mode compact explicite */
+.nav-items.compact-mode {
+  width: 100px;
+}
+
 .nav-items.compact-mode .nav-item {
   padding: 16px 0;
   justify-content: center;
 }
 
 .nav-items.compact-mode .brand h1 {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .nav-items.compact-mode .nav-item fa-icon {
@@ -136,105 +240,6 @@
 
 .nav-items.compact-mode .nav-item span {
   display: none;
-}
-
-/*!* Sidenav handle *!*/
-/*.sidenav-handle {*/
-/*  position: fixed;*/
-/*  top: 0;*/
-/*  right: -30px;*/
-/*  width: 30px;*/
-/*  height: 40px;*/
-/*  background-color: #e2e8f0;*/
-/*  border-radius: 0 0 12px 0;*/
-/*  cursor: pointer;*/
-/*  transition: all 0.3s ease;*/
-/*  opacity: 0;*/
-/*  pointer-events: none;*/
-/*  z-index: 1002;*/
-/*}*/
-
-/*.sidenav-handle:hover {*/
-/*  background-color: #0c4a94;*/
-/*}*/
-
-/*!* Show handle in compact/mobile mode when closed *!*/
-/*.nav-container.compact-mode .sidenav-handle,*/
-/*.nav-container:not(.is-open) .sidenav-handle.active {*/
-/*  opacity: 1;*/
-/*  pointer-events: auto;*/
-/*}*/
-
-/*!* Hide handle when mobile menu is open *!*/
-/*.nav-container.is-open .sidenav-handle {*/
-/*  opacity: 0;*/
-/*  pointer-events: none;*/
-/*}*/
-
-
-/* Mobile adjustments */
-@media only screen and (max-width: 768px) {
-  .nav-container {
-    width: 280px;
-    transform: translateX(-100%);
-  }
-  .nav-container.is-open {
-    transform: translateX(0);
-  }
-  .nav-items {
-    width: 280px;
-  }
-  .nav-container.compact-mode {
-    width: 280px;
-  }
-  .nav-items.compact-mode {
-    width: 280px;
-  }
-  .toggle-button {
-    top: 10px;
-    right: 10px;
-  }
-  .sidenav-handle {
-    width: 6px;
-    height: 60px;
-    right: 8px;
-    top: 8px;
-    border-radius: 0 3px 3px 0;
-  }
-  .sidenav-handle:hover {
-    width: 8px;
-  }
-  .sidenav.collapsed .sidenav-handle {
-    opacity: 1;
-    pointer-events: auto;
-    right: 0;
-  }
-}
-
-@media only screen and (max-width: 480px) {
-  .nav-container {
-    width: 250px;
-  }
-  .nav-items {
-    width: 250px;
-  }
-  .nav-items .brand h1 {
-    font-size: 16px;
-  }
-  .toggle-button {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
-  }
-  .sidenav-handle {
-    width: 5px;
-    height: 50px;
-    right: 6px;
-    top: 6px;
-  }
-  .sidenav-handle:hover {
-    width: 7px;
-  }
 }
 
 

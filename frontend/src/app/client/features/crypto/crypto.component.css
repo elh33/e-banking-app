@@ -321,3 +321,116 @@ th {
 .execute-transaction {
   width: 100%;
 }
+
+/* Styles responsifs pour les mobiles et petits écrans */
+@media only screen and (max-width: 768px) {
+  /* Mise en page générale */
+  .crypto-container {
+    padding: 10px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* Onglets */
+  .tabs {
+    width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 5px;
+  }
+
+  .tab {
+    padding: 8px 15px;
+  }
+
+  /* Vue du marché */
+  .market-view {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    grid-template-columns: 1fr;
+  }
+
+  .crypto-list {
+    max-height: 250px;
+  }
+
+  .crypto-item {
+    padding: 10px;
+  }
+
+  .crypto-info img {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Détail crypto */
+  .crypto-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .crypto-price {
+    text-align: left;
+    width: 100%;
+  }
+
+  /* Formulaire de transaction */
+  .transaction-type-selector button {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .form-group input, .form-group select {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  /* Tableau des transactions */
+  .transactions-list {
+    overflow-x: auto;
+  }
+
+  table {
+    min-width: 600px;
+  }
+
+  th, td {
+    padding: 8px;
+    font-size: 13px;
+  }
+}
+
+/* Pour les très petits écrans */
+@media only screen and (max-width: 480px) {
+  .timeframe-selector {
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .timeframe-selector button {
+    flex: 1;
+    text-align: center;
+  }
+
+  .crypto-title h3 {
+    font-size: 16px;
+  }
+
+  .current-price {
+    font-size: 18px;
+  }
+
+  /* Montrer moins de colonnes dans les tableaux */
+  .transactions-list th:nth-child(4),
+  .transactions-list th:nth-child(5),
+  .transactions-list td:nth-child(4),
+  .transactions-list td:nth-child(5) {
+    display: none;
+  }
+}

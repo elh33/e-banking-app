@@ -425,3 +425,129 @@ th, td {
     height: 50px;
   }
 }
+
+/* Amélioration de la responsivité des tableaux */
+@media (max-width: 768px) {
+  .recent-expenses {
+    padding: 0.75rem;
+  }
+
+  .recent-expenses table {
+    min-width: 100%;
+  }
+
+  .recent-expenses th,
+  .recent-expenses td {
+    padding: 8px 5px;
+    font-size: 0.85rem;
+  }
+
+  /* Conteneur avec défilement horizontal */
+  .recent-expenses {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* Pour une meilleure expérience sur iOS */
+  }
+}
+
+/* Pour très petits écrans */
+@media (max-width: 480px) {
+  .recent-expenses th:nth-child(3),
+  .recent-expenses td:nth-child(3) {
+    display: none; /* Cache la colonne "Catégorie" sur très petits écrans */
+  }
+
+  .recent-expenses th,
+  .recent-expenses td {
+    padding: 6px 4px;
+    font-size: 0.8rem;
+  }
+
+  .recent-expenses h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* Amélioration de la taille des graphiques */
+.expense-chart, .pie-chart {
+  max-height: 400px;
+  position: relative;
+}
+
+canvas {
+  max-height: 350px;
+}
+
+/* Ajustements responsive pour les graphiques */
+@media (max-width: 1024px) {
+  .expense-chart, .pie-chart {
+    max-height: 350px;
+  }
+
+  canvas {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .expense-chart, .pie-chart {
+    max-height: 300px;
+    padding-bottom: 10px;
+  }
+
+  canvas {
+    max-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .expense-chart, .pie-chart {
+    max-height: 250px;
+  }
+
+  canvas {
+    max-height: 200px;
+  }
+}
+
+/* Amélioration de la taille des graphiques */
+.expense-chart, .pie-chart {
+  max-height: 400px;
+  position: relative;
+}
+
+canvas {
+  max-height: 350px;
+}
+
+/* Ajustements responsive pour les graphiques */
+@media (max-width: 1024px) {
+  .expense-chart, .pie-chart {
+    max-height: 350px;
+  }
+
+  canvas {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .expense-chart, .pie-chart {
+    max-height: 300px;
+    padding-bottom: 10px;
+  }
+
+  canvas {
+    max-height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .expense-chart, .pie-chart {
+    max-height: 250px;
+  }
+
+  canvas {
+    max-height: 200px;
+  }
+}

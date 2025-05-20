@@ -11,6 +11,8 @@ import { Account } from '../../core/models/account.model';
 import { Subscription } from 'rxjs';
 import { ChartData, ChartOptions, TooltipItem } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-budget',
