@@ -62,7 +62,7 @@
   
   .form-group input:focus {
     outline: none;
-    border-color: #8b5cf6;
+    border-color: #3179E7;
     box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
   }
   
@@ -92,7 +92,7 @@
   .btn-login {
     width: 100%;
     padding: 12px;
-    background-color: #8b5cf6;
+    background-color: #3179E7;
     color: white;
     border: none;
     border-radius: 8px;
@@ -107,7 +107,7 @@
   }
   
   .btn-login:hover {
-    background-color: #7c3aed;
+    background-color: #3179E7;
   }
   
   .btn-login:disabled {
@@ -135,7 +135,7 @@
   }
   
   .forgot-password a {
-    color: #8b5cf6;
+    color: #3179E7;
     text-decoration: none;
     font-size: 14px;
     font-weight: 500;

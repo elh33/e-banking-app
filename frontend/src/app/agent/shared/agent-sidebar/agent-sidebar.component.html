@@ -1,40 +1,47 @@
-<div class="nav-items" [class.open]="isMobileMenuOpen" [class.compact-mode]="isCompactMode">
-  <div class="header-section">
-    <button class="toggle-button" (click)="toggleSideNav()">
-      <fa-icon [icon]="faBars"></fa-icon>
-    </button>
-    <div class="brand">
-      <h1>E-Bank Agent</h1>
+<div class="sidebar-container">
+  <div class="brand">
+    <span class="brand-text">E-Banking</span>
+    <span class="role-label">Agent</span>
+  </div>
+
+  <div class="nav-items">
+    <div class="nav-item" routerLink="/agent/dashboard" routerLinkActive="active">
+      <fa-icon [icon]="faHome"></fa-icon>
+      <span>Tableau de bord</span>
+    </div>
+
+    <div class="nav-item" routerLink="/agent/clients" routerLinkActive="active">
+      <fa-icon [icon]="faUsers"></fa-icon>
+      <span>Clients</span>
+    </div>
+
+    <div class="nav-item" routerLink="/agent/enrollments" routerLinkActive="active">
+      <fa-icon [icon]="faIdCard"></fa-icon>
+      <span>Inscriptions</span>
+    </div>
+
+    <div class="nav-item" routerLink="/agent/subscribers" routerLinkActive="active">
+      <fa-icon [icon]="faMoneyBillWave"></fa-icon>
+      <span>Abonnés</span>
+    </div>
+
+    <div class="nav-item" routerLink="/agent/accounts" routerLinkActive="active">
+      <fa-icon [icon]="faCreditCard"></fa-icon>
+      <span>Comptes</span>
+    </div>
+
+    <div class="nav-item" routerLink="/agent/contracts" routerLinkActive="active">
+      <fa-icon [icon]="faFileContract"></fa-icon>
+      <span>Contrats</span>
+    </div>
+
+    <div class="nav-item logout-item" (click)="openLogoutConfirm()">
+      <fa-icon [icon]="faSignOutAlt"></fa-icon>
+      <span>Déconnexion</span>
     </div>
   </div>
 
-  <div class="nav-item" routerLink="/agent/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-    <fa-icon [icon]="faChartLine"></fa-icon>
-    <span>Tableau de bord</span>
-  </div>
-
-  <div class="nav-item" routerLink="/agent/clients" routerLinkActive="active">
-    <fa-icon [icon]="faUsers"></fa-icon>
-    <span>Gestion Clients</span>
-  </div>
-
-  <div class="nav-item" routerLink="/agent/subscribers" routerLinkActive="active">
-    <fa-icon [icon]="faCreditCard"></fa-icon>
-    <span>Gestion Comptes</span>
-  </div>
-
-  <div class="nav-item" routerLink="/agent/enrollments" routerLinkActive="active">
-    <fa-icon [icon]="faClipboardList"></fa-icon>
-    <span>Inscriptions</span>
-  </div>
-
-  <!-- Item de déconnexion -->
-  <div class="nav-item logout" (click)="openLogoutConfirm()">
-    <fa-icon [icon]="faSignOutAlt"></fa-icon>
-    <span class="nav-text">Déconnexion</span>
-  </div>
-
-  <!-- Modal de confirmation de déconnexion -->
+  <!-- Logout confirmation modal -->
   <div *ngIf="showLogoutConfirm" class="logout-confirm-overlay">
     <div class="logout-confirm-modal">
       <div class="logout-confirm-header">

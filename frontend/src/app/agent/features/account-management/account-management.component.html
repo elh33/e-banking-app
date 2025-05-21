@@ -1,0 +1,171 @@
+<div class="account-management-container">
+    <div class="header">
+      <div class="title-section">
+        <h1>Gestion des Comptes</h1>
+        <p>Gérez les comptes bancaires disponibles dans le système</p>
+      </div>
+  
+      <div class="actions">
+        <div class="search-bar">
+          <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Rechercher un compte...">
+        </div>
+        <button class="btn-add" (click)="toggleForm()">
+          <fa-icon [icon]="showForm ? faTimes : faPlus"></fa-icon>
+          {{ showForm ? 'Annuler' : 'Créer un Compte' }}
+        </button>
+      </div>
+    </div>
+  
+    <div class="filter-section">
+      <div class="filter-group">
+        <label>Type:</label>
+        <select [(ngModel)]="typeFilter" (change)="applyFilters()">
+          <option value="all">Tous les types</option>
+          <option value="courant">Compte Courant</option>
+          <option value="epargne">Compte Épargne</option>
+          <option value="livret">Livret</option>
+        </select>
+      </div>
+  
+      <div class="filter-group">
+        <label>Statut:</label>
+        <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+          <option value="all">Tous les statuts</option>
+          <option value="available">Disponible</option>
+          <option value="assigned">Assigné</option>
+        </select>
+      </div>
+  
+      <div class="filter-group">
+        <label>Devise:</label>
+        <select [(ngModel)]="currencyFilter" (change)="applyFilters()">
+          <option value="all">Toutes les devises</option>
+          <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+        </select>
+      </div>
+    </div>
+  
+    <!-- Account Form -->
+    <div class="form-container" *ngIf="showForm">
+      <div class="form-card">
+        <h2>{{ isEditing ? 'Modifier le Compte' : 'Créer un Nouveau Compte' }}</h2>
+  
+        <form [formGroup]="accountForm" (ngSubmit)="onSubmit()">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="type">Type de Compte</label>
+              <select id="type" formControlName="type" (change)="onTypeChange()">
+                <option value="courant">Compte Courant</option>
+                <option value="epargne">Compte Épargne</option>
+                <option value="livret">Livret</option>
+              </select>
+              <div class="error-message" *ngIf="isFieldInvalid('type')">
+                {{ getErrorMessage('type') }}
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="currency">Devise</label>
+              <select id="currency" formControlName="currency">
+                <option *ngFor="let currency of currencies" [value]="currency">{{ currency }}</option>
+              </select>
+              <div class="error-message" *ngIf="isFieldInvalid('currency')">
+                {{ getErrorMessage('currency') }}
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="minimumBalance">Solde Minimum</label>
+              <input type="number" id="minimumBalance" formControlName="minimumBalance" min="0">
+              <div class="error-message" *ngIf="isFieldInvalid('minimumBalance')">
+                {{ getErrorMessage('minimumBalance') }}
+              </div>
+            </div>
+  
+            <div class="form-group">
+              <label for="interestRate">Taux d'Intérêt (%)</label>
+              <input type="number" id="interestRate" formControlName="interestRate" min="0" max="100" step="0.1">
+              <div class="error-message" *ngIf="isFieldInvalid('interestRate')">
+                {{ getErrorMessage('interestRate') }}
+              </div>
+            </div>
+          </div>
+  
+          <div class="form-group wide">
+            <label for="description">Description</label>
+            <textarea id="description" formControlName="description" rows="3" placeholder="Description du compte..."></textarea>
+          </div>
+  
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" (click)="toggleForm()">Annuler</button>
+            <button type="submit" class="btn-submit" [disabled]="accountForm.invalid">
+              {{ isEditing ? 'Mettre à jour' : 'Créer le Compte' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Accounts List -->
+    <div class="accounts-list" *ngIf="!isLoading; else loadingTemplate">
+      <div class="table-responsive">
+        <table *ngIf="filteredAccounts.length > 0; else noAccounts">
+          <thead>
+            <tr>
+              <th>N° de Compte</th>
+              <th>Type</th>
+              <th>Devise</th>
+              <th>Statut</th>
+              <th>Solde Minimum</th>
+              <th>Taux d'Intérêt</th>
+              <th>Date de Création</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let account of filteredAccounts">
+              <td data-label="N° de Compte">{{ account.accountNumber }}</td>
+              <td data-label="Type">{{ getTypeLabel(account.type) }}</td>
+              <td data-label="Devise">{{ account.currency }}</td>
+              <td data-label="Statut">
+                <span class="status-badge" [ngClass]="getStatusClass(account.status)">
+                  {{ getStatusLabel(account.status) }}
+                </span>
+              </td>
+              <td data-label="Solde Minimum">{{ account.minimumBalance || 0 }} {{ account.currency }}</td>
+              <td data-label="Taux d'Intérêt">{{ account.interestRate ? account.interestRate + '%' : 'N/A' }}</td>
+              <td data-label="Date de Création">{{ formatDate(account.dateCreated) }}</td>
+              <td data-label="Actions">
+                <div class="action-buttons">
+                  <button class="btn-action btn-edit" *ngIf="account.status === 'available'" (click)="editAccount(account)" title="Modifier">
+                    <fa-icon [icon]="faEdit"></fa-icon>
+                  </button>
+                  
+                  <button class="btn-action btn-delete" *ngIf="account.status === 'available'" (click)="deleteAccount(account.id)" title="Supprimer">
+                    <fa-icon [icon]="faTrash"></fa-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  
+    <ng-template #loadingTemplate>
+      <div class="loading-container">
+        <div class="spinner"></div>
+        <p>Chargement des comptes...</p>
+      </div>
+    </ng-template>
+  
+    <ng-template #noAccounts>
+      <div class="no-data-container">
+        <p>Aucun compte trouvé pour les critères sélectionnés.</p>
+        <button class="btn-add" (click)="toggleForm()" *ngIf="!showForm">
+          <fa-icon [icon]="faPlus"></fa-icon>
+          Créer un Compte
+        </button>
+      </div>
+    </ng-template>
+  </div>

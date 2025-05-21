@@ -8,6 +8,8 @@ import { SubscriberService } from './core/services/subscriber.service';
 import { TransactionService } from './core/services/transaction.service';
 import { ClientService } from './core/services/client.service';
 import { EnrollmentService } from './core/services/enrollment.service';
+import { AccountService } from './core/services/account.service';
+import { ContractService } from './core/services/contract.service';
 
 @NgModule({
   declarations: [],
@@ -20,7 +22,9 @@ import { EnrollmentService } from './core/services/enrollment.service';
     SubscriberService,
     TransactionService,
     ClientService,
-    EnrollmentService
+    EnrollmentService,
+    AccountService,
+    ContractService
   ]
 })
 export class AgentModule { }

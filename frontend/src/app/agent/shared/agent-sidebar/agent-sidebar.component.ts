@@ -14,7 +14,11 @@ import {
   faUserPlus,
   faFileInvoiceDollar,
   faAngleRight,
-  faBars
+  faBars,
+  faHome,
+  faIdCard,
+  faMoneyBillWave,
+  faFileContract
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -37,6 +41,10 @@ export class AgentSidebarComponent implements OnInit {
   faFileInvoiceDollar = faFileInvoiceDollar;
   faAngleRight = faAngleRight;
   faBars = faBars;
+  faHome = faHome;
+  faIdCard = faIdCard;
+  faMoneyBillWave = faMoneyBillWave;
+  faFileContract = faFileContract;
 
   showLogoutConfirm = false;
   isCompactMode = false;

@@ -1,0 +1,367 @@
+<div class="contract-management-container">
+  <div class="header">
+    <div class="title-section">
+      <h1>Gestion des Contrats</h1>
+      <p>Gérez les contrats d'association entre clients et comptes bancaires</p>
+    </div>
+
+    <div class="actions">
+      <div class="search-bar">
+        <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Rechercher un contrat...">
+      </div>
+      <button class="btn-add" (click)="showContractForm()">
+        <fa-icon [icon]="faPlus"></fa-icon>
+        Nouveau Contrat
+      </button>
+    </div>
+  </div>
+
+  <div class="filter-section">
+    <div class="filter-group">
+      <label>Statut:</label>
+      <select [(ngModel)]="statusFilter" (change)="applyFilters()">
+        <option value="all">Tous les statuts</option>
+        <option value="draft">Brouillon</option>
+        <option value="active">Actif</option>
+        <option value="terminated">Résilié</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Contract List -->
+  <div class="contracts-list" *ngIf="!isLoading; else loadingTemplate">
+    <div class="table-responsive">
+      <table *ngIf="filteredContracts.length > 0; else noContracts">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Client</th>
+            <th>Email</th>
+            <th>Nombre de comptes</th>
+            <th>Date de création</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let contract of filteredContracts">
+            <td data-label="ID">{{ contract.id }}</td>
+            <td data-label="Client">{{ contract.client?.firstName }} {{ contract.client?.lastName }}</td>
+            <td data-label="Email">{{ contract.client?.email }}</td>
+            <td data-label="Nombre de comptes">{{ contract.accounts.length || 0 }}</td>
+            <td data-label="Date de création">{{ formatDate(contract.dateCreated) }}</td>
+            <td data-label="Statut">
+              <span class="status-badge" [ngClass]="getStatusClass(contract.status)">
+                {{ getStatusLabel(contract.status) }}
+              </span>
+            </td>
+            <td data-label="Actions">
+              <div class="action-buttons">
+                <button class="btn-action btn-view" (click)="viewContractDetails(contract)" title="Voir les détails">
+                  <fa-icon [icon]="faEye"></fa-icon>
+                </button>
+                
+                <button class="btn-action btn-edit" *ngIf="contract.status !== 'terminated'" (click)="editContract(contract)" title="Modifier">
+                  <fa-icon [icon]="faEdit"></fa-icon>
+                </button>
+                
+                <button class="btn-action btn-activate" *ngIf="contract.status === 'draft'" (click)="activateContract(contract.id)" title="Activer">
+                  <fa-icon [icon]="faCheck"></fa-icon>
+                </button>
+
+                <button class="btn-action btn-terminate" *ngIf="contract.status === 'active'" (click)="terminateContract(contract.id)" title="Résilier">
+                  <fa-icon [icon]="faTimes"></fa-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Contract Form -->
+  <div class="modal-overlay" *ngIf="showForm">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2>{{ isEditing ? 'Modifier le contrat' : 'Nouveau contrat' }}</h2>
+        <button class="close-button" (click)="closeForm()">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <form [formGroup]="contractForm">
+          <div class="form-section">
+            <h3>Informations générales</h3>
+            
+            <div class="form-group">
+              <label for="clientId">Client *</label>
+              <select 
+                id="clientId" 
+                formControlName="clientId"
+                [attr.disabled]="isEditing ? true : null"
+              >
+                <option value="">Sélectionnez un client</option>
+                <option *ngFor="let client of clients" [value]="client.id">
+                  {{ client.firstName }} {{ client.lastName }} ({{ client.email }})
+                </option>
+              </select>
+              <div class="error-message" *ngIf="isFieldInvalid('clientId')">
+                Veuillez sélectionner un client
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea 
+                id="description" 
+                formControlName="description"
+                rows="2"
+                placeholder="Description optionnelle du contrat"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="terms">Termes et conditions</label>
+              <textarea 
+                id="terms" 
+                formControlName="terms"
+                rows="3"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <h3>Comptes disponibles</h3>
+            <p class="helper-text">Sélectionnez les comptes à associer au client:</p>
+
+            <div class="accounts-grid">
+              <div 
+                *ngFor="let account of availableAccounts"
+                class="account-card"
+                [class.selected]="isAccountSelected(account.id)"
+                (click)="toggleAccountSelection(account.id)"
+              >
+                <div class="account-header">
+                  <span class="account-type">{{ getAccountTypeLabel(account.type) }}</span>
+                  <span class="account-select-indicator">
+                    <fa-icon *ngIf="isAccountSelected(account.id)" [icon]="faCheck"></fa-icon>
+                  </span>
+                </div>
+                <div class="account-number">{{ account.accountNumber }}</div>
+                <div class="account-details">
+                  <span>{{ account.currency }}</span>
+                  <span *ngIf="account.interestRate">Taux: {{ account.interestRate }}%</span>
+                  <span>Min: {{ account.minimumBalance }} {{ account.currency }}</span>
+                </div>
+              </div>
+              
+              <div *ngIf="availableAccounts.length === 0" class="no-accounts-message">
+                Aucun compte disponible actuellement. 
+                <a routerLink="/agent/accounts">Créer des comptes</a>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-cancel" (click)="closeForm()">Annuler</button>
+        <button 
+          class="btn-submit" 
+          [disabled]="contractForm.invalid || (selectedAvailableAccounts.length === 0 && !isEditing)"
+          (click)="onSubmit()"
+        >
+          {{ isEditing ? 'Mettre à jour' : 'Créer le contrat' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contract Details Modal -->
+  <div class="modal-overlay" *ngIf="showDetails && selectedContract">
+    <div class="modal-container details-container">
+      <div class="modal-header">
+        <h2>Détails du Contrat</h2>
+        <button class="close-button" (click)="closeDetails()">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="contract-details">
+          <div class="details-section">
+            <h3>Informations générales</h3>
+            
+            <div class="details-grid">
+              <div class="detail-item">
+                <span class="detail-label">ID du contrat</span>
+                <span class="detail-value">{{ selectedContract.id }}</span>
+              </div>
+              
+              <div class="detail-item">
+                <span class="detail-label">Statut</span>
+                <span class="detail-value">
+                  <span class="status-badge" [ngClass]="getStatusClass(selectedContract.status)">
+                    {{ getStatusLabel(selectedContract.status) }}
+                  </span>
+                </span>
+              </div>
+              
+              <div class="detail-item">
+                <span class="detail-label">Date de création</span>
+                <span class="detail-value">{{ formatDate(selectedContract.dateCreated) }}</span>
+              </div>
+              
+              <div class="detail-item">
+                <span class="detail-label">Date d'activation</span>
+                <span class="detail-value">{{ selectedContract.dateActivated ? formatDate(selectedContract.dateActivated) : 'Non activé' }}</span>
+              </div>
+            </div>
+            
+            <div class="detail-item full-width">
+              <span class="detail-label">Description</span>
+              <span class="detail-value">{{ selectedContract.description || 'Aucune description' }}</span>
+            </div>
+            
+            <div class="detail-item full-width" *ngIf="selectedContract.terms">
+              <span class="detail-label">Termes et conditions</span>
+              <span class="detail-value terms-text">{{ selectedContract.terms }}</span>
+            </div>
+          </div>
+          
+          <div class="details-section">
+            <h3>Informations du client</h3>
+            
+            <div class="client-info" *ngIf="selectedContract.client">
+              <div class="details-grid">
+                <div class="detail-item">
+                  <span class="detail-label">Nom complet</span>
+                  <span class="detail-value">{{ selectedContract.client.firstName }} {{ selectedContract.client.lastName }}</span>
+                </div>
+                
+                <div class="detail-item">
+                  <span class="detail-label">Email</span>
+                  <span class="detail-value">{{ selectedContract.client.email }}</span>
+                </div>
+                
+                <div class="detail-item" *ngIf="selectedContract.client.phone">
+                  <span class="detail-label">Téléphone</span>
+                  <span class="detail-value">{{ selectedContract.client.phone }}</span>
+                </div>
+                
+                <div class="detail-item" *ngIf="selectedContract.client.address">
+                  <span class="detail-label">Adresse</span>
+                  <span class="detail-value">{{ selectedContract.client.address }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="details-section">
+            <h3>Comptes associés</h3>
+            
+            <div *ngIf="selectedContract.accounts && selectedContract.accounts.length > 0" class="accounts-list">
+              <div class="account-item" *ngFor="let account of selectedContract.accounts">
+                <div class="account-card">
+                  <div class="account-header">
+                    <span class="account-type">{{ getAccountTypeLabel(account.type) }}</span>
+                    <span class="account-number">{{ account.accountNumber }}</span>
+                  </div>
+                  
+                  <div class="account-details">
+                    <div class="account-detail">
+                      <span class="detail-label">Devise</span>
+                      <span class="detail-value">{{ account.currency }}</span>
+                    </div>
+                    
+                    <div class="account-detail">
+                      <span class="detail-label">Solde minimum</span>
+                      <span class="detail-value">{{ account.minimumBalance || 0 }} {{ account.currency }}</span>
+                    </div>
+                    
+                    <div class="account-detail" *ngIf="account.interestRate">
+                      <span class="detail-label">Taux d'intérêt</span>
+                      <span class="detail-value">{{ account.interestRate }}%</span>
+                    </div>
+                  </div>
+                  
+                  <div class="account-actions" *ngIf="selectedContract.status !== 'terminated'">
+                    <button 
+                      class="btn-remove-account" 
+                      (click)="removeAccountFromContract(selectedContract.id, account.id)"
+                      title="Retirer ce compte du contrat"
+                    >
+                      <fa-icon [icon]="faTimes"></fa-icon> Retirer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div *ngIf="!selectedContract.accounts || selectedContract.accounts.length === 0" class="no-accounts-message">
+              <p>Aucun compte associé à ce contrat.</p>
+            </div>
+          </div>
+          
+          <div class="details-section" *ngIf="selectedContract.documents && selectedContract.documents.length > 0">
+            <h3>Documents</h3>
+            
+            <div class="documents-list">
+              <div class="document-item" *ngFor="let doc of selectedContract.documents">
+                <div class="document-icon">
+                  <fa-icon [icon]="faFileAlt"></fa-icon>
+                </div>
+                <div class="document-info">
+                  <span class="document-name">{{ doc.name }}</span>
+                  <span class="document-date">Ajouté le {{ formatDate(doc.uploaded) }}</span>
+                </div>
+                <div class="document-actions">
+                  <button class="btn-download-document">Télécharger</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-edit" *ngIf="selectedContract.status !== 'terminated'" (click)="editContract(selectedContract)">
+          <fa-icon [icon]="faEdit"></fa-icon> Modifier
+        </button>
+        
+        <button 
+          class="btn-activate" 
+          *ngIf="selectedContract.status === 'draft'"
+          (click)="activateContract(selectedContract.id)"
+        >
+          <fa-icon [icon]="faCheck"></fa-icon> Activer
+        </button>
+        
+        <button 
+          class="btn-terminate" 
+          *ngIf="selectedContract.status === 'active'"
+          (click)="terminateContract(selectedContract.id)"
+        >
+          <fa-icon [icon]="faTimes"></fa-icon> Résilier
+        </button>
+        
+        <button class="btn-close" (click)="closeDetails()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loadingTemplate>
+    <div class="loading-container">
+      <div class="spinner"></div>
+      <p>Chargement des contrats...</p>
+    </div>
+  </ng-template>
+
+  <ng-template #noContracts>
+    <div class="no-data-container">
+      <p>Aucun contrat trouvé pour les critères sélectionnés.</p>
+      <button class="btn-add" (click)="showContractForm()">
+        <fa-icon [icon]="faPlus"></fa-icon>
+        Nouveau Contrat
+      </button>
+    </div>
+  </ng-template>
+</div>

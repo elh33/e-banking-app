@@ -1,12 +1,12 @@
 import { Component, Inject, OnInit, HostListener, PLATFORM_ID, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { isPlatformBrowser, NgClass, NgIf } from '@angular/common';
+import { isPlatformBrowser, NgClass } from '@angular/common';
 import { AgentSidebarComponent } from '../shared/agent-sidebar/agent-sidebar.component';
 
 @Component({
   selector: 'app-agent-layout',
   standalone: true,
-  imports: [RouterOutlet, AgentSidebarComponent, NgClass, NgIf],
+  imports: [RouterOutlet, AgentSidebarComponent, NgClass],
   templateUrl: './agent-layout.component.html',
   styleUrls: ['./agent-layout.component.css']
 })
